@@ -5,10 +5,10 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone) {
       status: "in progress"
     },
     initialize: function() {
-      console.log("game created");
+
     },
     isOver: function() {
-      return this.get('status');
+      return this.get('status') != "in progress";
     }
   });
   return Game;
