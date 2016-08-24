@@ -1,4 +1,4 @@
-define(['../application/models/Game'], function(Game){
+define(['../../js/app/models/Game'], function(Game){
   describe("Game", function() {
     beforeEach(function() {
       game = new Game();

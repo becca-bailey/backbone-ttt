@@ -21,11 +21,7 @@ define(['jquery', 'backbone'], function($, Backbone) {
 
     getCurrentMarker: function() {
       var isXTurn = this.get('isXTurn');
-      if (isXTurn) {
-        return "X";
-      } else {
-        return "O";
-      }
+      return isXTurn ? "X" : "O";
     },
 
     makeMove: function(spotId) {
