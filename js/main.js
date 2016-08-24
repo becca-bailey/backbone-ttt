@@ -1,5 +1,5 @@
 require.config({
-  baseUrl: 'js',
+  baseUrl: 'js/',
   paths: {
     jquery: 'lib/jquery/jquery-3.1.0.min',
     underscore: 'lib/underscore/underscore-min',
@@ -19,8 +19,8 @@ require.config({
 require([
   'jquery',
   'backbone',
-  'application/models/Game',
-  'application/views/BoardView'
+  'app/models/Game',
+  'app/views/BoardView'
 ], function($, Backbone, Game, BoardView) {
   var Router = Backbone.Router.extend({
     routes: {
