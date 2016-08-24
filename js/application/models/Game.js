@@ -1,4 +1,4 @@
-define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone) {
+define(['jquery', 'backbone'], function($, Backbone) {
   var Game = Backbone.Model.extend({
     defaults: {
       board: ["", "", "", "", "", "", "", "", ""],
