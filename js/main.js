@@ -1,9 +1,9 @@
 require.config({
-  baseUrl: 'js/application',
+  baseUrl: 'js',
   paths: {
-    jquery: '../lib/jquery/jquery-3.1.0.min',
-    underscore: '../lib/underscore/underscore-min',
-    backbone: '../lib/backbone/backbone-min'
+    jquery: 'lib/jquery/jquery-3.1.0.min',
+    underscore: 'lib/underscore/underscore-min',
+    backbone: 'lib/backbone/backbone-min'
   },
   shim: {
     underscore: {
@@ -19,16 +19,16 @@ require.config({
 require([
   'jquery',
   'backbone',
-  'models/Game',
-  'views/SpotView'
-], function($, Backbone, Game, MenuView, GameView, SpotView) {
+  'application/models/Game',
+  'application/views/BoardView'
+], function($, Backbone, Game, BoardView) {
   var Router = Backbone.Router.extend({
     routes: {
       "": "main"
     },
     main: function() {
       var game = new Game();
-      var spots = new SpotView();
+      var board = new BoardView(game);
     }
   });
   var router = new Router();

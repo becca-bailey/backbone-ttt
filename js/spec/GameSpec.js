@@ -30,5 +30,23 @@ define(['../application/models/Game'], function(Game){
         expect(game.isOver()).toBe(true);
       });
     });
+
+    describe("changeTurn", function() {
+      it("toggles the variable isXTurn", function() {
+        expect(game.get('isXTurn')).toBe(true);
+        game.changeTurn();
+        expect(game.get('isXTurn')).toBe(false);
+      });
+    });
+
+    describe("getCurrentMarker", function() {
+      it("returns the current player's marker", function() {
+        expect(game.get('isXTurn')).toBe(true);
+        expect(game.getCurrentMarker()).toEqual("X");
+        game.changeTurn();
+        expect(game.get('isXTurn')).toBe(false);
+        expect(game.getCurrentMarker()).toEqual("O");
+      });
+    });
   });
 });

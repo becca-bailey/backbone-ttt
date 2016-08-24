@@ -18,7 +18,7 @@ require.config({
 });
 
 require(['jasmine-boot'], function() {
-  require(['../spec/GameSpec'], function() {
+  require(['../spec/GameSpec', '../spec/SpotViewSpec'], function() {
     window.onload()
   });
 });
