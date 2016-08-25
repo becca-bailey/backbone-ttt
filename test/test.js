@@ -6,20 +6,19 @@ require.config({
     'jasmine': 'jasmine/lib/jasmine-2.4.1/jasmine',
     'jasmine-html': 'jasmine/lib/jasmine-2.4.1/jasmine-html',
     'jasmine-boot': 'jasmine/lib/jasmine-2.4.1/boot',
-    sinon: 'sinon/sinon-1.17.5'
   },
   shim: {
     'jasmine-html': {
       deps: ['jasmine']
     },
     'jasmine-boot': {
-      deps: ['jasmine', 'jasmine-html']
+      deps: ['jquery', 'jasmine', 'jasmine-html']
     }
   }
 });
 
 require(['jasmine-boot'], function() {
-  require(['spec/GameSpec', 'spec/BoardViewSpec'], function() {
+  require(['spec/GameSpec', 'spec/GameViewSpec'], function() {
     window.onload()
   });
 });

@@ -20,15 +20,15 @@ require([
   'jquery',
   'backbone',
   'app/models/Game',
-  'app/views/BoardView'
-], function($, Backbone, Game, BoardView) {
+  'app/views/GameView'
+], function($, Backbone, Game, GameView) {
   var Router = Backbone.Router.extend({
     routes: {
       "": "main"
     },
     main: function() {
       var game = new Game();
-      var board = new BoardView(game);
+      var gameView = new GameView(game);
     }
   });
   var router = new Router();
