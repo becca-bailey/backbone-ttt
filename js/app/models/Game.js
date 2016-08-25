@@ -25,7 +25,9 @@ define(['jquery', 'backbone'], function($, Backbone) {
     },
 
     makeMove: function(spotId) {
-      console.log(spotId);
+      var board = this.get('board');
+      board[spotId] = this.getCurrentMarker();
+      this.updateBoard(board);
     },
 
     updateBoard: function(board) {

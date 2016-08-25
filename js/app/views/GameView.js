@@ -5,28 +5,31 @@ define(['jquery', 'backbone'], function($, Backbone) {
       "click .spot": "move"
     },
 
-    initialize: function(game) {
-      this.game = game;
+    initialize: function() {
       $(".spot").height($(".spot").width());
-      this.listenTo(game, 'updateBoard', this.render);
+      this.listenTo(this.model, 'updateBoard', this.render);
     },
 
     move: function(e) {
       var spotClicked = $(e.currentTarget);
       if (spotClicked.hasClass("enabled")) {
         spotClicked.removeClass("enabled");
-        spotClicked.html(this.game.getCurrentMarker());
-        this.game.makeMove(spotClicked.attr("id"));
-        this.game.changeTurn();
+        this.model.makeMove(spotClicked.attr("id"));
+        this.model.changeTurn();
       }
     },
 
     render: function() {
       for (i = 0; i < 9; i++) {
-        board = this.game.get('board')
-        $("#" + i).html(board[i]);
+        var marker = this.model.get('board')[i]
+        $("#" + i).html(this.getMarkerHTML(marker));
       }
     },
+
+    getMarkerHTML: function(marker) {
+      var htmlclass = marker === "X" ? "human-move" : "computer-move";
+      return ("<span class=" + htmlclass + ">" + marker + "</span>");
+    }
   });
   return GameView;
 });
