@@ -2,9 +2,7 @@ define(['../../js/app/views/GameView', '../../js/app/models/Game', 'jquery'], fu
   describe("GameView", function() {
     beforeEach(function() {
       game = new Game();
-      gameView = new GameView(game);
-      spyOn(gameView, 'render');
-      spyOn(game, 'updateBoard');
+      gameView = new GameView({model: game});
     });
 
     it("exists", function() {
@@ -15,9 +13,18 @@ define(['../../js/app/views/GameView', '../../js/app/models/Game', 'jquery'], fu
       expect($(".spot").height()).toEqual($(".spot").width());
     });
 
-    // it("listens for 'change' events in the model", function() {
-    //   game.makeMove(0);
-    //   expect(game.updateBoard).toHaveBeenCalled();
-    // });
+    describe("resetGame", function() {
+      it("resets the model", function() {
+        spyOn(game, 'resetAttributes');
+        gameView.resetGame();
+        expect(game.resetAttributes).toHaveBeenCalled();
+      });
+      
+      it("enables all the spots", function() {
+        spyOn(gameView, 'enableAllSpots');
+        gameView.resetGame();
+        expect(gameView.enableAllSpots).toHaveBeenCalled();
+      })
+    });
   });
 });

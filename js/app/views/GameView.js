@@ -1,13 +1,14 @@
 define(['jquery', 'backbone'], function($, Backbone) {
   var GameView = Backbone.View.extend({
-    el: '#board',
+    el: '#game',
     events: {
-      "click .spot": "move"
+      "click .spot": "move",
+      "click #play-again": "resetGame"
     },
 
     initialize: function() {
       $(".spot").height($(".spot").width());
-      this.listenTo(this.model, 'updateBoard', this.render);
+      this.listenTo(this.model, 'change', this.render);
     },
 
     move: function(e) {
@@ -15,7 +16,7 @@ define(['jquery', 'backbone'], function($, Backbone) {
       if (spotClicked.hasClass("enabled")) {
         spotClicked.removeClass("enabled");
         this.model.makeMove(spotClicked.attr("id"));
-        this.model.changeTurn();
+        this.model.nextTurn();
       }
     },
 
@@ -29,6 +30,20 @@ define(['jquery', 'backbone'], function($, Backbone) {
     getMarkerHTML: function(marker) {
       var htmlclass = marker === "X" ? "human-move" : "computer-move";
       return ("<span class=" + htmlclass + ">" + marker + "</span>");
+    },
+
+    resetGame: function() {
+      this.model.resetAttributes();
+      this.enableAllSpots();
+    },
+
+    enableAllSpots: function() {
+      for (i = 0; i < 9; i++) {
+        var $spot = $("#" + i);
+        if (!$spot.hasClass("enabled")) {
+          $spot.addClass("enabled");
+        }
+      }
     }
   });
   return GameView;

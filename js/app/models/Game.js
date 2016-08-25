@@ -6,10 +6,6 @@ define(['jquery', 'backbone'], function($, Backbone) {
       isXTurn: true
     },
 
-    initialize: function() {
-
-    },
-
     isOver: function() {
       return this.get('status') != "in progress";
     },
@@ -17,6 +13,14 @@ define(['jquery', 'backbone'], function($, Backbone) {
     changeTurn: function() {
       var currentTurn = !this.get('isXTurn');
       this.set({'isXTurn': currentTurn});
+    },
+
+    nextTurn: function(){
+      this.changeTurn();
+      // if(!this.isXTurn) {
+      //   this.computerMove();
+      //   this.changeTurn();
+      // }
     },
 
     getCurrentMarker: function() {
@@ -32,6 +36,16 @@ define(['jquery', 'backbone'], function($, Backbone) {
 
     updateBoard: function(board) {
       this.set({'board': board});
+    },
+
+    computerMove: function() {
+      this.makeMove(2);
+    },
+
+    resetAttributes: function() {
+      this.set({'board': ["", "", "", "", "", "", "", "", ""],
+                'status': 'in-progress',
+                'isXTurn': true});
     }
   });
   return Game;
