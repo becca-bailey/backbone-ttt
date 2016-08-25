@@ -26,6 +26,10 @@ define(['jquery', 'backbone'], function($, Backbone) {
 
     makeMove: function(spotId) {
       console.log(spotId);
+    },
+
+    updateBoard: function(board) {
+      this.set({'board': board});
     }
   });
   return Game;

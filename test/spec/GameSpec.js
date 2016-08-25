@@ -1,12 +1,13 @@
 define(['../../js/app/models/Game'], function(Game){
   describe("Game", function() {
     beforeEach(function() {
+      emptyBoard = ["", "", "", "", "", "", "", "", ""];
       game = new Game();
     });
 
     it("is initialized with an empty board", function() {
       var board = game.get('board');
-      expect(board).toEqual(["", "", "", "", "", "", "", "", ""]);
+      expect(board).toEqual(emptyBoard);
     });
 
     it("is initialized with a status", function() {
@@ -48,5 +49,14 @@ define(['../../js/app/models/Game'], function(Game){
         expect(game.getCurrentMarker()).toEqual("O");
       });
     });
+
+    describe("updateBoard", function() {
+      it("updates the board", function() {
+        expect(game.get('board')).toEqual(emptyBoard);
+        var updatedBoard = ["X", "", "", "", "", "", "", "", ""];
+        game.updateBoard(updatedBoard);
+        expect(game.get('board')).toEqual(updatedBoard);
+      })
+    })
   });
 });

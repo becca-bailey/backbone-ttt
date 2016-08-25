@@ -1,5 +1,5 @@
 define(['jquery', 'backbone'], function($, Backbone) {
-  var BoardView = Backbone.View.extend({
+  var GameView = Backbone.View.extend({
     el: '#board',
     events: {
       "click .spot": "move"
@@ -8,6 +8,7 @@ define(['jquery', 'backbone'], function($, Backbone) {
     initialize: function(game) {
       this.game = game;
       $(".spot").height($(".spot").width());
+      this.listenTo(game, 'updateBoard', this.render);
     },
 
     move: function(e) {
@@ -18,7 +19,14 @@ define(['jquery', 'backbone'], function($, Backbone) {
         this.game.makeMove(spotClicked.attr("id"));
         this.game.changeTurn();
       }
-    }
+    },
+
+    render: function() {
+      for (i = 0; i < 9; i++) {
+        board = this.game.get('board')
+        $("#" + i).html(board[i]);
+      }
+    },
   });
-  return BoardView;
+  return GameView;
 });
