@@ -28,7 +28,7 @@ require([
     },
     main: function() {
       var game = new Game();
-      var gameView = new GameView(game);
+      var gameView = new GameView({model: game});
     }
   });
   var router = new Router();

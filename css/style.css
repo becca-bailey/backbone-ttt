@@ -22,3 +22,11 @@
 .right {
   border-left: 2px solid black;
 }
+
+.human-move {
+  color: blue;
+}
+
+.human-move, .computer-move {
+  width: 100%;
+}
