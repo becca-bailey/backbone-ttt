@@ -1,13 +1,12 @@
-define(['../../js/app/models/Game'], function(Game){
+define(['../application/models/Game'], function(Game){
   describe("Game", function() {
     beforeEach(function() {
-      emptyBoard = ["", "", "", "", "", "", "", "", ""];
       game = new Game();
     });
 
     it("is initialized with an empty board", function() {
       var board = game.get('board');
-      expect(board).toEqual(emptyBoard);
+      expect(board).toEqual(["", "", "", "", "", "", "", "", ""]);
     });
 
     it("is initialized with a status", function() {
@@ -47,23 +46,6 @@ define(['../../js/app/models/Game'], function(Game){
         game.changeTurn();
         expect(game.get('isXTurn')).toBe(false);
         expect(game.getCurrentMarker()).toEqual("O");
-      });
-    });
-
-    describe("updateBoard", function() {
-      it("updates the board", function() {
-        expect(game.get('board')).toEqual(emptyBoard);
-        var updatedBoard = ["X", "", "", "", "", "", "", "", ""];
-        game.updateBoard(updatedBoard);
-        expect(game.get('board')).toEqual(updatedBoard);
-      });
-    });
-
-    describe("makeMove", function() {
-      it("calls updateBaord", function() {
-        spyOn(game, 'updateBoard');
-        game.makeMove();
-        expect(game.updateBoard).toHaveBeenCalled();
       });
     });
   });
