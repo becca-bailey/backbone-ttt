@@ -16,10 +16,10 @@ GameView = Backbone.View.extend(
     if spotClicked.hasClass('enabled')
       spotClicked.removeClass 'enabled'
       @model.makeMove spotClicked.attr('id')
-      @model.nextTurn()
+      @model.endTurn()
 
   render: ->
-    for i in [0...9] 
+    for i in [0...9]
       marker = @model.get('board')[i]
       $('#' + i).html @getMarkerHTML(marker)
 
