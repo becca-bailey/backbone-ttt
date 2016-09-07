@@ -1,0 +1,5 @@
+MAIN="spec/test.js"
+BUNDLE="test_bundle.js"
+ECHO "Compiling ${MAIN} into ${BUNDLE}"
+watchify ${MAIN} -o ${BUNDLE}
+
