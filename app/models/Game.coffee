@@ -4,17 +4,7 @@ $ = require('jquery')
 
 Game = Backbone.Model.extend(
   defaults:
-    board: [
-      ''
-      ''
-      ''
-      ''
-      ''
-      ''
-      ''
-      ''
-      ''
-    ]
+    board: ['','','','','','','','','']
     status: 'in progress'
     isXTurn: true
 
@@ -22,46 +12,42 @@ Game = Backbone.Model.extend(
     @get('status') != 'in progress'
 
   changeTurn: ->
-    currentTurn = !@get('isXTurn')
-    @set 'isXTurn': currentTurn
+    @set 'isXTurn': !@get('isXTurn')
 
-  nextTurn: ->
+  endTurn: ->
     @changeTurn()
-    # if(!this.isXTurn) {
-    #   this.computerMove();
-    #   this.changeTurn();
-    # }
+    unless @get('isXTurn')
+        @computerMove()
+        @changeTurn();
 
   getCurrentMarker: ->
-    isXTurn = @get('isXTurn')
-    if isXTurn then 'X' else 'O'
+    if @get('isXTurn') then 'X' else 'O'
 
   makeMove: (spotId) ->
     board = @get('board')
     board[spotId] = @getCurrentMarker()
     @updateBoard board
+    @endTurn
 
   updateBoard: (board) ->
     @set 'board': board
 
-  computerMove: ->
-    @makeMove 2
+  updateStatus: (status) ->
+    @set 'status': status
+
+  updateGameWithResponseData: (response, game) ->
+    game.set 'board': response.board
+    game.set 'status': response.status
+    game.endTurn
+
+  computerMove: () ->
+    json = {board: @get('board'), gameType: "humanVsComputer", computerDifficulty: "hard"}
+    data = JSON.stringify(json)
+    client = @get 'client'
+    client.postUpdatedGame(data, this, @updateGameWithResponseData)
 
   resetAttributes: ->
-    @set
-      'board': [
-        ''
-        ''
-        ''
-        ''
-        ''
-        ''
-        ''
-        ''
-        ''
-      ]
-      'status': 'in-progress'
-      'isXTurn': true
+    @set @defaults
 )
 
 module.exports = Game
