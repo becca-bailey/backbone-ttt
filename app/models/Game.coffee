@@ -47,6 +47,7 @@ Game = Backbone.Model.extend(
 
   resetAttributes: ->
     @set @defaults
+    @set 'board': ['','','','','','','','','']
 )
 
 module.exports = Game

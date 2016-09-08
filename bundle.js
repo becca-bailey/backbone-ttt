@@ -127,7 +127,10 @@ Game = Backbone.Model.extend({
     return client.postUpdatedGame(data, this, this.updateGameWithResponseData);
   },
   resetAttributes: function() {
-    return this.set(this.defaults);
+    this.set(this.defaults);
+    return this.set({
+      'board': ['', '', '', '', '', '', '', '', '']
+    });
   }
 });
 
@@ -149,7 +152,8 @@ GameView = Backbone.View.extend({
   },
   initialize: function() {
     $('.spot').height($('.spot').width());
-    return this.listenTo(this.model, 'change', this.render);
+    this.listenTo(this.model, 'change', this.render);
+    return this.listenTo(this.model, 'change', this.checkGameStatus);
   },
   move: function(e) {
     var spotClicked;
@@ -162,13 +166,35 @@ GameView = Backbone.View.extend({
     }
   },
   render: function() {
-    var i, j, marker, results;
+    var i, j, marker, results, text;
+    text = this.getStatusText(this.model.get('status'));
+    $("#status").html(text);
     results = [];
     for (i = j = 0; j < 9; i = ++j) {
       marker = this.model.get('board')[i];
       results.push($('#' + i).html(this.getMarkerHTML(marker)));
     }
     return results;
+  },
+  checkGameStatus: function() {
+    if (this.model.isOver()) {
+      return this.endGame();
+    }
+  },
+  endGame: function() {
+    return this.disableAllSpots();
+  },
+  getStatusText: function(status) {
+    switch (status) {
+      case "in progress":
+        return "Your turn!";
+      case "tie":
+        return "It's a tie!";
+      case "player1Wins":
+        return "X Wins!";
+      case "player2Wins":
+        return "O Wins!";
+    }
   },
   getMarkerHTML: function(marker) {
     var htmlclass;

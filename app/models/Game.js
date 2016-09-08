@@ -72,7 +72,10 @@ Game = Backbone.Model.extend({
     return client.postUpdatedGame(data, this, this.updateGameWithResponseData);
   },
   resetAttributes: function() {
-    return this.set(this.defaults);
+    this.set(this.defaults);
+    return this.set({
+      'board': ['', '', '', '', '', '', '', '', '']
+    });
   }
 });
 

@@ -73,7 +73,10 @@ Game = Backbone.Model.extend({
     return client.postUpdatedGame(data, this, this.updateGameWithResponseData);
   },
   resetAttributes: function() {
-    return this.set(this.defaults);
+    this.set(this.defaults);
+    return this.set({
+      'board': ['', '', '', '', '', '', '', '', '']
+    });
   }
 });
 
@@ -95,7 +98,8 @@ GameView = Backbone.View.extend({
   },
   initialize: function() {
     $('.spot').height($('.spot').width());
-    return this.listenTo(this.model, 'change', this.render);
+    this.listenTo(this.model, 'change', this.render);
+    return this.listenTo(this.model, 'change', this.checkGameStatus);
   },
   move: function(e) {
     var spotClicked;
@@ -108,13 +112,35 @@ GameView = Backbone.View.extend({
     }
   },
   render: function() {
-    var i, j, marker, results;
+    var i, j, marker, results, text;
+    text = this.getStatusText(this.model.get('status'));
+    $("#status").html(text);
     results = [];
     for (i = j = 0; j < 9; i = ++j) {
       marker = this.model.get('board')[i];
       results.push($('#' + i).html(this.getMarkerHTML(marker)));
     }
     return results;
+  },
+  checkGameStatus: function() {
+    if (this.model.isOver()) {
+      return this.endGame();
+    }
+  },
+  endGame: function() {
+    return this.disableAllSpots();
+  },
+  getStatusText: function(status) {
+    switch (status) {
+      case "in progress":
+        return "Your turn!";
+      case "tie":
+        return "It's a tie!";
+      case "player1Wins":
+        return "X Wins!";
+      case "player2Wins":
+        return "O Wins!";
+    }
   },
   getMarkerHTML: function(marker) {
     var htmlclass;
@@ -27759,6 +27785,7 @@ var MockClient = require("./mocks/MockClient");
 
 describe("Game", function() {
   var initialBoard = ["", "", "", "", "", "", "", "", ""];
+  var player1Move = ["X", "", "", "", "", "", "", "", ""]
 
   beforeEach(function() {
     client = new MockClient();
@@ -27767,7 +27794,7 @@ describe("Game", function() {
 
   it("is initialized with an empty board", function() {
     var board = game.get('board');
-    expect(board).toEqual(["", "", "", "", "", "", "", "", ""]);
+    expect(board).toEqual(initialBoard);
   });
 
   it("is initialized with a status", function() {
@@ -27826,10 +27853,9 @@ describe("Game", function() {
 
   describe("updateBoard", function() {
     it("updates the board attribute", function() {
-      var expectedBoard = ["X", "", "", "", "", "", "", "", ""]
       expect(game.get('board')).toEqual(initialBoard);
-      game.updateBoard(expectedBoard);
-      expect(game.get('board')).toEqual(expectedBoard);
+      game.updateBoard(player1Move);
+      expect(game.get('board')).toEqual(player1Move);
     });
   });
 
@@ -27860,6 +27886,20 @@ describe("Game", function() {
       expect(game.get('status')).toEqual("player1Wins");
     });
   });
+  
+  describe("resetAttributes", function() {
+    it("resets the board", function() {
+      game.updateBoard(player1Move);
+      game.resetAttributes();
+      expect(game.get('board')).toEqual(initialBoard);
+    });
+
+    it("resets the status", function() {
+      game.updateStatus("player1Wins");
+      game.resetAttributes();
+      expect(game.get('status')).toEqual("in progress");
+    });
+  });
 });
 
 },{"../app/models/Game":1,"./mocks/MockClient":34}],33:[function(require,module,exports){
@@ -27886,6 +27926,13 @@ describe("GameView", function() {
     gameView = new GameView({model: game});
     gameView.render();
     expect($("#0").html()).toEqual("<span class=\"human-move\">X</span>");
+  });
+
+  it("calls end game if the game is over", function() {
+    spyOn(gameView, "endGame");
+    gameView.model.updateStatus("player1Wins");
+    gameView.checkGameStatus();
+    expect(gameView.endGame).toHaveBeenCalled();
   });
 
   describe("move", function() {
@@ -27924,6 +27971,7 @@ describe("GameView", function() {
       gameView.move(click);
       expect(gameView.model.makeMove).not.toHaveBeenCalled();
     });
+
   });
 
   describe("disableAllSpots", function() {
@@ -27981,6 +28029,28 @@ describe("GameView", function() {
 
     it("enables all spots", function() {
       expect(gameView.enableAllSpots).toHaveBeenCalled();
+    });
+  });
+
+  describe("endGame", function() {
+    it("changes the status text based on the game status", function() {
+      gameView.model.updateStatus("player1Wins");
+      gameView.endGame();
+      expect($("#status")).toHaveText("X Wins!"); 
+
+      gameView.model.updateStatus("player2Wins");
+      gameView.endGame();
+      expect($("#status")).toHaveText("O Wins!");
+
+      gameView.model.updateStatus("tie");
+      gameView.endGame();
+      expect($("#status")).toHaveText("It's a tie!");
+    });
+
+    it("disables all spots", function() {
+      spyOn(gameView, "disableAllSpots");
+      gameView.endGame();
+      expect(gameView.disableAllSpots).toHaveBeenCalled();
     });
   });
 });
