@@ -3,6 +3,7 @@ var MockClient = require("./mocks/MockClient");
 
 describe("Game", function() {
   var initialBoard = ["", "", "", "", "", "", "", "", ""];
+  var player1Move = ["X", "", "", "", "", "", "", "", ""]
 
   beforeEach(function() {
     client = new MockClient();
@@ -11,7 +12,7 @@ describe("Game", function() {
 
   it("is initialized with an empty board", function() {
     var board = game.get('board');
-    expect(board).toEqual(["", "", "", "", "", "", "", "", ""]);
+    expect(board).toEqual(initialBoard);
   });
 
   it("is initialized with a status", function() {
@@ -70,10 +71,9 @@ describe("Game", function() {
 
   describe("updateBoard", function() {
     it("updates the board attribute", function() {
-      var expectedBoard = ["X", "", "", "", "", "", "", "", ""]
       expect(game.get('board')).toEqual(initialBoard);
-      game.updateBoard(expectedBoard);
-      expect(game.get('board')).toEqual(expectedBoard);
+      game.updateBoard(player1Move);
+      expect(game.get('board')).toEqual(player1Move);
     });
   });
 
@@ -102,6 +102,20 @@ describe("Game", function() {
       expect(game.get('status')).toEqual("in progress")
       game.computerMove();
       expect(game.get('status')).toEqual("player1Wins");
+    });
+  });
+  
+  describe("resetAttributes", function() {
+    it("resets the board", function() {
+      game.updateBoard(player1Move);
+      game.resetAttributes();
+      expect(game.get('board')).toEqual(initialBoard);
+    });
+
+    it("resets the status", function() {
+      game.updateStatus("player1Wins");
+      game.resetAttributes();
+      expect(game.get('status')).toEqual("in progress");
     });
   });
 });

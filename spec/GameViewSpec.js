@@ -23,6 +23,13 @@ describe("GameView", function() {
     expect($("#0").html()).toEqual("<span class=\"human-move\">X</span>");
   });
 
+  it("calls end game if the game is over", function() {
+    spyOn(gameView, "endGame");
+    gameView.model.updateStatus("player1Wins");
+    gameView.checkGameStatus();
+    expect(gameView.endGame).toHaveBeenCalled();
+  });
+
   describe("move", function() {
     beforeEach(function() {
       spyOn(gameView.model, "makeMove");
@@ -59,6 +66,7 @@ describe("GameView", function() {
       gameView.move(click);
       expect(gameView.model.makeMove).not.toHaveBeenCalled();
     });
+
   });
 
   describe("disableAllSpots", function() {
@@ -116,6 +124,28 @@ describe("GameView", function() {
 
     it("enables all spots", function() {
       expect(gameView.enableAllSpots).toHaveBeenCalled();
+    });
+  });
+
+  describe("endGame", function() {
+    it("changes the status text based on the game status", function() {
+      gameView.model.updateStatus("player1Wins");
+      gameView.endGame();
+      expect($("#status")).toHaveText("X Wins!"); 
+
+      gameView.model.updateStatus("player2Wins");
+      gameView.endGame();
+      expect($("#status")).toHaveText("O Wins!");
+
+      gameView.model.updateStatus("tie");
+      gameView.endGame();
+      expect($("#status")).toHaveText("It's a tie!");
+    });
+
+    it("disables all spots", function() {
+      spyOn(gameView, "disableAllSpots");
+      gameView.endGame();
+      expect(gameView.disableAllSpots).toHaveBeenCalled();
     });
   });
 });
