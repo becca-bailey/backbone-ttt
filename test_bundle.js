@@ -40,8 +40,7 @@ Game = Backbone.Model.extend({
     var board;
     board = this.get('board');
     board[spotId] = this.getCurrentMarker();
-    this.updateBoard(board);
-    return this.endTurn;
+    return this.updateBoard(board);
   },
   updateBoard: function(board) {
     return this.set({
@@ -102,9 +101,10 @@ GameView = Backbone.View.extend({
     var spotClicked;
     spotClicked = $(e.currentTarget);
     if (spotClicked.hasClass('enabled')) {
-      spotClicked.removeClass('enabled');
+      this.disableAllSpots();
       this.model.makeMove(spotClicked.attr('id'));
-      return this.model.endTurn();
+      this.model.endTurn();
+      return this.enableEmptySpots();
     }
   },
   render: function() {
@@ -125,18 +125,37 @@ GameView = Backbone.View.extend({
     this.model.resetAttributes();
     return this.enableAllSpots();
   },
-  enableAllSpots: function() {
+  applyToAllSpots: function(functionToApply) {
     var $spot, i, j, results;
     results = [];
     for (i = j = 0; j < 9; i = ++j) {
       $spot = $('#' + i);
-      if (!$spot.hasClass('enabled')) {
-        results.push($spot.addClass('enabled'));
-      } else {
-        results.push(void 0);
-      }
+      results.push(functionToApply($spot, i));
     }
     return results;
+  },
+  enableAllSpots: function() {
+    return this.applyToAllSpots(function($spot) {
+      if (!$spot.hasClass('enabled')) {
+        return $spot.addClass('enabled');
+      }
+    });
+  },
+  disableAllSpots: function() {
+    return this.applyToAllSpots(function($spot) {
+      if ($spot.hasClass('enabled')) {
+        return $spot.removeClass('enabled');
+      }
+    });
+  },
+  enableEmptySpots: function() {
+    var board;
+    board = this.model.get('board');
+    return this.applyToAllSpots(function($spot, i) {
+      if (board[i] === "") {
+        return $spot.addClass('enabled');
+      }
+    });
   }
 });
 
@@ -27849,6 +27868,8 @@ var Game = require('../app/models/Game');
 var $ = require('jquery');
 
 describe("GameView", function() {
+  var newBoard = ["X", "", "", "", "", "", "", "", ""];
+
   beforeEach(function() {
     game = new Game();
     gameView = new GameView({model: game});
@@ -27861,17 +27882,81 @@ describe("GameView", function() {
   });
 
   it("renders the board", function() {
-    game.updateBoard(["X", "", "", "", "", "", "", "", ""]);
+    game.updateBoard(newBoard);
     gameView = new GameView({model: game});
     gameView.render();
     expect($("#0").html()).toEqual("<span class=\"human-move\">X</span>");
   });
 
-  it("enables the spots on the board", function() {
-    $("#0").removeClass("enabled");
-    expect($("#0")).not.toHaveClass("enabled");
-    gameView.enableAllSpots();
-    expect($("#0")).toHaveClass("enabled");
+  describe("move", function() {
+    beforeEach(function() {
+      spyOn(gameView.model, "makeMove");
+      spyOn(gameView.model, "endTurn");
+      spyOn(gameView, "disableAllSpots");
+      spyOn(gameView, "enableEmptySpots");
+
+      click = {currentTarget: $("#0")};
+    });
+
+    it("disables all spots if the spot is enabled", function() {
+      gameView.move(click);
+      expect(gameView.disableAllSpots).toHaveBeenCalled();
+    });
+
+    it("ends the turn", function() {
+      gameView.move(click);
+      expect(gameView.model.endTurn).toHaveBeenCalled();    
+    });
+
+    it("enables all empty spots", function() {
+      gameView.move(click);
+      expect(gameView.enableEmptySpots).toHaveBeenCalled();
+    });
+
+    it("updates the model if the spot is enabled", function() {
+      gameView.move(click);
+      expect($("#0")).toHaveClass("enabled");
+      expect(gameView.model.makeMove).toHaveBeenCalled();
+    });
+
+    it("does not update the model if the spot is disabled", function() {
+      $("#0").removeClass("enabled");
+      gameView.move(click);
+      expect(gameView.model.makeMove).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("disableAllSpots", function() {
+    it("disables the spots on the board", function() {
+      gameView.disableAllSpots();
+      for (i = 0; i < 9; i++) {
+        expect($("#" + i)).not.toHaveClass("enabled");
+      }
+    });
+  });
+
+  describe("enableAllSpots", function() {
+    it("enables the spots on the board", function() {
+      gameView.disableAllSpots();
+      gameView.enableAllSpots();
+      for (i = 0; i < 9; i++) {
+        expect($("#" + i)).toHaveClass("enabled");
+      }
+    });
+  });
+
+  describe("enableEmptySpots", function() {
+    beforeEach(function() {
+      gameView.model.updateBoard(newBoard);
+      gameView.render();
+      gameView.disableAllSpots();
+      gameView.enableEmptySpots();
+    });      
+
+    it("enables only empty spots on the board", function() {
+      expect($("#0")).not.toHaveClass("enabled");
+      expect($("#1")).toHaveClass("enabled");
+    });
   });
 
   describe("getMarkerHTML", function() {
@@ -27884,10 +27969,18 @@ describe("GameView", function() {
   });
 
   describe("resetGame", function() {
-    it("resets all attributes in the model", function() {
+    beforeEach(function() {
       spyOn(gameView.model, "resetAttributes");
+      spyOn(gameView, "enableAllSpots");
       gameView.resetGame();
+    });
+
+    it("resets all attributes in the model", function() {
       expect(gameView.model.resetAttributes).toHaveBeenCalled();
+    });
+
+    it("enables all spots", function() {
+      expect(gameView.enableAllSpots).toHaveBeenCalled();
     });
   });
 });

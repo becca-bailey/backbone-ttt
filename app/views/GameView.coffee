@@ -13,10 +13,11 @@ GameView = Backbone.View.extend(
 
   move: (e) ->
     spotClicked = $(e.currentTarget)
-    if spotClicked.hasClass('enabled')
-      spotClicked.removeClass 'enabled'
+    if spotClicked.hasClass 'enabled'
+      @disableAllSpots()
       @model.makeMove spotClicked.attr('id')
       @model.endTurn()
+      @enableEmptySpots()
 
   render: ->
     for i in [0...9]
@@ -31,10 +32,25 @@ GameView = Backbone.View.extend(
     @model.resetAttributes()
     @enableAllSpots()
 
-  enableAllSpots: ->
+  applyToAllSpots: (functionToApply) ->
     for i in [0...9]
       $spot = $('#' + i)
-      unless $spot.hasClass('enabled')
+      functionToApply($spot, i)
+    
+  enableAllSpots: ->
+    @applyToAllSpots ($spot) ->
+      unless $spot.hasClass 'enabled'
+        $spot.addClass 'enabled'
+
+  disableAllSpots: -> 
+    @applyToAllSpots ($spot) ->
+      if $spot.hasClass 'enabled' 
+        $spot.removeClass 'enabled'
+
+  enableEmptySpots: ->
+    board = @model.get('board')
+    @applyToAllSpots ($spot, i) ->
+      if board[i] == ""
         $spot.addClass 'enabled'
 )
 
