@@ -1,8 +1,12 @@
 var Game = require("../app/models/Game");
+var MockClient = require("./mocks/MockClient");
 
 describe("Game", function() {
+  var initialBoard = ["", "", "", "", "", "", "", "", ""];
+
   beforeEach(function() {
-    game = new Game();
+    client = new MockClient();
+    game = new Game({client: client});
   });
 
   it("is initialized with an empty board", function() {
@@ -47,6 +51,57 @@ describe("Game", function() {
       game.changeTurn();
       expect(game.get('isXTurn')).toBe(false);
       expect(game.getCurrentMarker()).toEqual("O");
+    });
+  });
+
+  describe("endTurn", function() {
+    it("changes the turn", function() {
+      game.set({'isXTurn': false});
+      game.endTurn();
+      expect(game.get('isXTurn')).toBe(true);
+    });
+
+    it("calls computerMove if it is the computer's turn", function() {
+      spyOn(game, 'computerMove');
+      game.endTurn();
+      expect(game.computerMove).toHaveBeenCalled();
+    });
+  });
+
+  describe("updateBoard", function() {
+    it("updates the board attribute", function() {
+      var expectedBoard = ["X", "", "", "", "", "", "", "", ""]
+      expect(game.get('board')).toEqual(initialBoard);
+      game.updateBoard(expectedBoard);
+      expect(game.get('board')).toEqual(expectedBoard);
+    });
+  });
+
+  describe("updateStatus", function() {
+    it("updates the status attribute", function() {
+      expect(game.get('status')).toEqual("in progress");
+      game.updateStatus('player1Wins');
+      expect(game.get('status')).toEqual("player1Wins");
+    });
+  });
+
+  describe("computerMove", function() {
+    it("invokes the callback", function() {
+      spyOn(game, 'updateGameWithResponseData')
+      game.computerMove();
+      expect(game.updateGameWithResponseData).toHaveBeenCalled();
+    });
+
+    it("updates the board", function() {
+      expect(game.get('board')).toEqual(initialBoard);
+      game.computerMove();
+      expect(game.get('board')).not.toEqual(initialBoard);
+    });
+
+    it("updates the status", function() {
+      expect(game.get('status')).toEqual("in progress")
+      game.computerMove();
+      expect(game.get('status')).toEqual("player1Wins");
     });
   });
 });
