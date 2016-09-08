@@ -94,8 +94,7 @@ Game = Backbone.Model.extend({
     var board;
     board = this.get('board');
     board[spotId] = this.getCurrentMarker();
-    this.updateBoard(board);
-    return this.endTurn;
+    return this.updateBoard(board);
   },
   updateBoard: function(board) {
     return this.set({
@@ -156,9 +155,10 @@ GameView = Backbone.View.extend({
     var spotClicked;
     spotClicked = $(e.currentTarget);
     if (spotClicked.hasClass('enabled')) {
-      spotClicked.removeClass('enabled');
+      this.disableAllSpots();
       this.model.makeMove(spotClicked.attr('id'));
-      return this.model.endTurn();
+      this.model.endTurn();
+      return this.enableEmptySpots();
     }
   },
   render: function() {
@@ -179,18 +179,37 @@ GameView = Backbone.View.extend({
     this.model.resetAttributes();
     return this.enableAllSpots();
   },
-  enableAllSpots: function() {
+  applyToAllSpots: function(functionToApply) {
     var $spot, i, j, results;
     results = [];
     for (i = j = 0; j < 9; i = ++j) {
       $spot = $('#' + i);
-      if (!$spot.hasClass('enabled')) {
-        results.push($spot.addClass('enabled'));
-      } else {
-        results.push(void 0);
-      }
+      results.push(functionToApply($spot, i));
     }
     return results;
+  },
+  enableAllSpots: function() {
+    return this.applyToAllSpots(function($spot) {
+      if (!$spot.hasClass('enabled')) {
+        return $spot.addClass('enabled');
+      }
+    });
+  },
+  disableAllSpots: function() {
+    return this.applyToAllSpots(function($spot) {
+      if ($spot.hasClass('enabled')) {
+        return $spot.removeClass('enabled');
+      }
+    });
+  },
+  enableEmptySpots: function() {
+    var board;
+    board = this.model.get('board');
+    return this.applyToAllSpots(function($spot, i) {
+      if (board[i] === "") {
+        return $spot.addClass('enabled');
+      }
+    });
   }
 });
 

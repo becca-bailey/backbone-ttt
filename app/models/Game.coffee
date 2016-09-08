@@ -27,7 +27,6 @@ Game = Backbone.Model.extend(
     board = @get('board')
     board[spotId] = @getCurrentMarker()
     @updateBoard board
-    @endTurn
 
   updateBoard: (board) ->
     @set 'board': board
