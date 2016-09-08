@@ -10,18 +10,37 @@ GameView = Backbone.View.extend(
   initialize: ->
     $('.spot').height $('.spot').width()
     @listenTo @model, 'change', @render
+    @listenTo @model, 'change', @checkGameStatus
 
   move: (e) ->
     spotClicked = $(e.currentTarget)
-    if spotClicked.hasClass('enabled')
-      spotClicked.removeClass 'enabled'
+    if spotClicked.hasClass 'enabled'
+      @disableAllSpots()
       @model.makeMove spotClicked.attr('id')
       @model.endTurn()
+      @enableEmptySpots()
 
   render: ->
+    text = @getStatusText(@model.get('status'))
+    $("#status").html(text)
+  
     for i in [0...9]
       marker = @model.get('board')[i]
       $('#' + i).html @getMarkerHTML(marker)
+
+  checkGameStatus: ->
+    if @model.isOver()
+      @endGame()
+
+  endGame: ->
+    @disableAllSpots()
+
+  getStatusText: (status) ->
+    switch status
+      when "in progress" then "Your turn!"
+      when "tie" then "It's a tie!"
+      when "player1Wins" then "X Wins!"
+      when "player2Wins" then "O Wins!"
 
   getMarkerHTML: (marker) ->
     htmlclass = if marker == 'X' then 'human-move' else 'computer-move'
@@ -31,10 +50,25 @@ GameView = Backbone.View.extend(
     @model.resetAttributes()
     @enableAllSpots()
 
-  enableAllSpots: ->
+  applyToAllSpots: (functionToApply) ->
     for i in [0...9]
       $spot = $('#' + i)
-      unless $spot.hasClass('enabled')
+      functionToApply($spot, i)
+    
+  enableAllSpots: ->
+    @applyToAllSpots ($spot) ->
+      unless $spot.hasClass 'enabled'
+        $spot.addClass 'enabled'
+
+  disableAllSpots: -> 
+    @applyToAllSpots ($spot) ->
+      if $spot.hasClass 'enabled' 
+        $spot.removeClass 'enabled'
+
+  enableEmptySpots: ->
+    board = @model.get('board')
+    @applyToAllSpots ($spot, i) ->
+      if board[i] == ""
         $spot.addClass 'enabled'
 )
 

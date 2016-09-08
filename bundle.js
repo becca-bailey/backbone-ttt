@@ -94,8 +94,7 @@ Game = Backbone.Model.extend({
     var board;
     board = this.get('board');
     board[spotId] = this.getCurrentMarker();
-    this.updateBoard(board);
-    return this.endTurn;
+    return this.updateBoard(board);
   },
   updateBoard: function(board) {
     return this.set({
@@ -128,7 +127,10 @@ Game = Backbone.Model.extend({
     return client.postUpdatedGame(data, this, this.updateGameWithResponseData);
   },
   resetAttributes: function() {
-    return this.set(this.defaults);
+    this.set(this.defaults);
+    return this.set({
+      'board': ['', '', '', '', '', '', '', '', '']
+    });
   }
 });
 
@@ -150,25 +152,49 @@ GameView = Backbone.View.extend({
   },
   initialize: function() {
     $('.spot').height($('.spot').width());
-    return this.listenTo(this.model, 'change', this.render);
+    this.listenTo(this.model, 'change', this.render);
+    return this.listenTo(this.model, 'change', this.checkGameStatus);
   },
   move: function(e) {
     var spotClicked;
     spotClicked = $(e.currentTarget);
     if (spotClicked.hasClass('enabled')) {
-      spotClicked.removeClass('enabled');
+      this.disableAllSpots();
       this.model.makeMove(spotClicked.attr('id'));
-      return this.model.endTurn();
+      this.model.endTurn();
+      return this.enableEmptySpots();
     }
   },
   render: function() {
-    var i, j, marker, results;
+    var i, j, marker, results, text;
+    text = this.getStatusText(this.model.get('status'));
+    $("#status").html(text);
     results = [];
     for (i = j = 0; j < 9; i = ++j) {
       marker = this.model.get('board')[i];
       results.push($('#' + i).html(this.getMarkerHTML(marker)));
     }
     return results;
+  },
+  checkGameStatus: function() {
+    if (this.model.isOver()) {
+      return this.endGame();
+    }
+  },
+  endGame: function() {
+    return this.disableAllSpots();
+  },
+  getStatusText: function(status) {
+    switch (status) {
+      case "in progress":
+        return "Your turn!";
+      case "tie":
+        return "It's a tie!";
+      case "player1Wins":
+        return "X Wins!";
+      case "player2Wins":
+        return "O Wins!";
+    }
   },
   getMarkerHTML: function(marker) {
     var htmlclass;
@@ -179,18 +205,37 @@ GameView = Backbone.View.extend({
     this.model.resetAttributes();
     return this.enableAllSpots();
   },
-  enableAllSpots: function() {
+  applyToAllSpots: function(functionToApply) {
     var $spot, i, j, results;
     results = [];
     for (i = j = 0; j < 9; i = ++j) {
       $spot = $('#' + i);
-      if (!$spot.hasClass('enabled')) {
-        results.push($spot.addClass('enabled'));
-      } else {
-        results.push(void 0);
-      }
+      results.push(functionToApply($spot, i));
     }
     return results;
+  },
+  enableAllSpots: function() {
+    return this.applyToAllSpots(function($spot) {
+      if (!$spot.hasClass('enabled')) {
+        return $spot.addClass('enabled');
+      }
+    });
+  },
+  disableAllSpots: function() {
+    return this.applyToAllSpots(function($spot) {
+      if ($spot.hasClass('enabled')) {
+        return $spot.removeClass('enabled');
+      }
+    });
+  },
+  enableEmptySpots: function() {
+    var board;
+    board = this.model.get('board');
+    return this.applyToAllSpots(function($spot, i) {
+      if (board[i] === "") {
+        return $spot.addClass('enabled');
+      }
+    });
   }
 });
 

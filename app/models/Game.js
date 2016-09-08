@@ -39,8 +39,7 @@ Game = Backbone.Model.extend({
     var board;
     board = this.get('board');
     board[spotId] = this.getCurrentMarker();
-    this.updateBoard(board);
-    return this.endTurn;
+    return this.updateBoard(board);
   },
   updateBoard: function(board) {
     return this.set({
@@ -73,7 +72,10 @@ Game = Backbone.Model.extend({
     return client.postUpdatedGame(data, this, this.updateGameWithResponseData);
   },
   resetAttributes: function() {
-    return this.set(this.defaults);
+    this.set(this.defaults);
+    return this.set({
+      'board': ['', '', '', '', '', '', '', '', '']
+    });
   }
 });
 
