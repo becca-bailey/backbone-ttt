@@ -122,10 +122,9 @@ Game = Backbone.Model.extend({
     game.set({
       'board': response.board
     });
-    game.set({
+    return game.set({
       'status': response.status
     });
-    return game.endTurn;
   },
   computerMove: function() {
     var client, data, json;
@@ -165,7 +164,8 @@ GameView = Backbone.View.extend({
   initialize: function() {
     $('.spot').height($('.spot').width());
     this.listenTo(this.model, 'change', this.render);
-    return this.listenTo(this.model, 'change', this.checkGameStatus);
+    this.listenTo(this.model, 'change:board', this.enableEmptySpots);
+    return this.listenTo(this.model, 'change:status', this.checkGameStatus);
   },
   move: function(e) {
     var spotClicked;
@@ -173,8 +173,7 @@ GameView = Backbone.View.extend({
     if (spotClicked.hasClass('enabled')) {
       this.disableAllSpots();
       this.model.makeMove(spotClicked.attr('id'));
-      this.model.endTurn();
-      return this.enableEmptySpots();
+      return this.model.endTurn();
     }
   },
   render: function() {
