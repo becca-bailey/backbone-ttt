@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "testem"
+    "test": "./node_modules/.bin/testem"
   },
   "repository": {
     "type": "git",
