@@ -4,7 +4,9 @@ A tic tac toe client built with Backbone.js
 
 [Click here](http://beccanelson.is/backbone-ttt) to play!
 
-## To play locally: 
+## To play locally:
+
+With [Node.js](https://nodejs.org/en/) installed: 
 
 + Clone this repository
 + In the root directory: `npm install`
@@ -12,4 +14,8 @@ A tic tac toe client built with Backbone.js
 
 ## To run tests:
 
-In the root directory: `testem`
+In the root directory: `
+```
+npm -g install testem
+testem
+```
