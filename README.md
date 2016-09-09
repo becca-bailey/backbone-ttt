@@ -14,8 +14,7 @@ With [Node.js](https://nodejs.org/en/) installed:
 
 ## To run tests:
 
-In the root directory: `
+In the root directory: 
 ```
-npm -g install testem
-testem
+npm test
 ```
