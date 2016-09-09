@@ -12,4 +12,4 @@ Router = Backbone.Router.extend(
 )
 $(document).ready ->
   router = new Router
-e.history.start()
+  Backbone.history.start()
