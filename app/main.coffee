@@ -9,9 +9,7 @@ Router = Backbone.Router.extend(
     client = new Client
     game = new Game(client: client)
     gameView = new GameView(model: game)
-    return
 )
 $(document).ready ->
   router = new Router
-  Backbone.history.start()
-  return
+e.history.start()

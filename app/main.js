@@ -21,7 +21,7 @@ Router = Backbone.Router.extend({
     game = new Game({
       client: client
     });
-    gameView = new GameView({
+    return gameView = new GameView({
       model: game
     });
   }
@@ -29,6 +29,7 @@ Router = Backbone.Router.extend({
 
 $(document).ready(function() {
   var router;
-  router = new Router;
-  Backbone.history.start();
+  return router = new Router;
 });
+
+e.history.start();
