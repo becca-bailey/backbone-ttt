@@ -10,7 +10,8 @@ GameView = Backbone.View.extend(
   initialize: ->
     $('.spot').height $('.spot').width()
     @listenTo @model, 'change', @render
-    @listenTo @model, 'change', @checkGameStatus
+    @listenTo @model, 'change:board', @enableEmptySpots
+    @listenTo @model, 'change:status', @checkGameStatus
 
   move: (e) ->
     spotClicked = $(e.currentTarget)
@@ -18,7 +19,6 @@ GameView = Backbone.View.extend(
       @disableAllSpots()
       @model.makeMove spotClicked.attr('id')
       @model.endTurn()
-      @enableEmptySpots()
 
   render: ->
     text = @getStatusText(@model.get('status'))

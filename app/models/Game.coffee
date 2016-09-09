@@ -37,7 +37,6 @@ Game = Backbone.Model.extend(
   updateGameWithResponseData: (response, game) ->
     game.set 'board': response.board
     game.set 'status': response.status
-    game.endTurn
 
   computerMove: () ->
     json = {board: @get('board'), gameType: "humanVsComputer", computerDifficulty: "hard"}

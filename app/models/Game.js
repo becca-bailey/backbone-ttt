@@ -55,10 +55,9 @@ Game = Backbone.Model.extend({
     game.set({
       'board': response.board
     });
-    game.set({
+    return game.set({
       'status': response.status
     });
-    return game.endTurn;
   },
   computerMove: function() {
     var client, data, json;
