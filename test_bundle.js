@@ -56,10 +56,9 @@ Game = Backbone.Model.extend({
     game.set({
       'board': response.board
     });
-    game.set({
+    return game.set({
       'status': response.status
     });
-    return game.endTurn;
   },
   computerMove: function() {
     var client, data, json;
@@ -99,7 +98,8 @@ GameView = Backbone.View.extend({
   initialize: function() {
     $('.spot').height($('.spot').width());
     this.listenTo(this.model, 'change', this.render);
-    return this.listenTo(this.model, 'change', this.checkGameStatus);
+    this.listenTo(this.model, 'change:board', this.enableEmptySpots);
+    return this.listenTo(this.model, 'change:status', this.checkGameStatus);
   },
   move: function(e) {
     var spotClicked;
@@ -107,8 +107,7 @@ GameView = Backbone.View.extend({
     if (spotClicked.hasClass('enabled')) {
       this.disableAllSpots();
       this.model.makeMove(spotClicked.attr('id'));
-      this.model.endTurn();
-      return this.enableEmptySpots();
+      return this.model.endTurn();
     }
   },
   render: function() {
@@ -27922,8 +27921,7 @@ describe("GameView", function() {
   });
 
   it("renders the board", function() {
-    game.updateBoard(newBoard);
-    gameView = new GameView({model: game});
+    gameView.model.updateBoard(newBoard);
     gameView.render();
     expect($("#0").html()).toEqual("<span class=\"human-move\">X</span>");
   });
@@ -27940,7 +27938,6 @@ describe("GameView", function() {
       spyOn(gameView.model, "makeMove");
       spyOn(gameView.model, "endTurn");
       spyOn(gameView, "disableAllSpots");
-      spyOn(gameView, "enableEmptySpots");
 
       click = {currentTarget: $("#0")};
     });
@@ -27953,11 +27950,6 @@ describe("GameView", function() {
     it("ends the turn", function() {
       gameView.move(click);
       expect(gameView.model.endTurn).toHaveBeenCalled();    
-    });
-
-    it("enables all empty spots", function() {
-      gameView.move(click);
-      expect(gameView.enableEmptySpots).toHaveBeenCalled();
     });
 
     it("updates the model if the spot is enabled", function() {

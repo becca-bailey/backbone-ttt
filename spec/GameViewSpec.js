@@ -17,8 +17,7 @@ describe("GameView", function() {
   });
 
   it("renders the board", function() {
-    game.updateBoard(newBoard);
-    gameView = new GameView({model: game});
+    gameView.model.updateBoard(newBoard);
     gameView.render();
     expect($("#0").html()).toEqual("<span class=\"human-move\">X</span>");
   });
@@ -35,7 +34,6 @@ describe("GameView", function() {
       spyOn(gameView.model, "makeMove");
       spyOn(gameView.model, "endTurn");
       spyOn(gameView, "disableAllSpots");
-      spyOn(gameView, "enableEmptySpots");
 
       click = {currentTarget: $("#0")};
     });
@@ -48,11 +46,6 @@ describe("GameView", function() {
     it("ends the turn", function() {
       gameView.move(click);
       expect(gameView.model.endTurn).toHaveBeenCalled();    
-    });
-
-    it("enables all empty spots", function() {
-      gameView.move(click);
-      expect(gameView.enableEmptySpots).toHaveBeenCalled();
     });
 
     it("updates the model if the spot is enabled", function() {
