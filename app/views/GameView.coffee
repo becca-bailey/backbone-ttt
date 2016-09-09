@@ -18,7 +18,6 @@ GameView = Backbone.View.extend(
     if spotClicked.hasClass 'enabled'
       @disableAllSpots()
       @model.makeMove spotClicked.attr('id')
-      @model.endTurn()
 
   render: ->
     text = @getStatusText(@model.get('status'))
@@ -37,7 +36,8 @@ GameView = Backbone.View.extend(
 
   getStatusText: (status) ->
     switch status
-      when "in progress" then "Your turn!"
+      when !@model.get('isXTurn') then "Computer is thinking..."
+      when "in progress" && @model.get('isXTurn') then "Your turn!"
       when "tie" then "It's a tie!"
       when "player1Wins" then "X Wins!"
       when "player2Wins" then "O Wins!"

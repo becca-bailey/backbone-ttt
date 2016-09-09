@@ -37,6 +37,19 @@ describe("Game", function() {
     });
   });
 
+  describe("makeMove", function() {
+    it("updates the board", function() {
+      spyOn(game, "updateBoard");
+      game.makeMove(0);
+      expect(game.updateBoard).toHaveBeenCalled();
+    });
+
+    it("updates the board based on the server response", function() {
+      game.makeMove(0);
+      expect(game.get('board')).toEqual(['X', 'X', 'X', 'O', '', '', 'O', '', '']);
+    });
+  });
+
   describe("changeTurn", function() {
     it("toggles the variable isXTurn", function() {
       expect(game.get('isXTurn')).toBe(true);
@@ -57,9 +70,9 @@ describe("Game", function() {
 
   describe("endTurn", function() {
     it("changes the turn", function() {
-      game.set({'isXTurn': false});
+      spyOn(game, "changeTurn");
       game.endTurn();
-      expect(game.get('isXTurn')).toBe(true);
+      expect(game.changeTurn).toHaveBeenCalled();
     });
 
     it("calls computerMove if it is the computer's turn", function() {
@@ -71,7 +84,6 @@ describe("Game", function() {
 
   describe("updateBoard", function() {
     it("updates the board attribute", function() {
-      expect(game.get('board')).toEqual(initialBoard);
       game.updateBoard(player1Move);
       expect(game.get('board')).toEqual(player1Move);
     });
@@ -79,7 +91,6 @@ describe("Game", function() {
 
   describe("updateStatus", function() {
     it("updates the status attribute", function() {
-      expect(game.get('status')).toEqual("in progress");
       game.updateStatus('player1Wins');
       expect(game.get('status')).toEqual("player1Wins");
     });
@@ -93,13 +104,11 @@ describe("Game", function() {
     });
 
     it("updates the board", function() {
-      expect(game.get('board')).toEqual(initialBoard);
       game.computerMove();
       expect(game.get('board')).not.toEqual(initialBoard);
     });
 
     it("updates the status", function() {
-      expect(game.get('status')).toEqual("in progress")
       game.computerMove();
       expect(game.get('status')).toEqual("player1Wins");
     });
