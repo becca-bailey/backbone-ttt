@@ -4,16 +4,20 @@
     <meta charset="utf-8">
     <title>Backbone tic-tac-toe</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fredoka+One|Lato:300" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <script src="bundle.js"></script>
   </head>
   <body>
     <div class="container">
-      <h1>Welcome to Tic Tac Toe!</h1>
       <section id="game">
-        <h3 id="status">Your turn!</h3>
         <div class="row">
-          <div id="board" class="col s10 offset-s1 m6 offset-m3">
+          <div class="col s12 l6">
+            <h1>Welcome to Tic Tac Toe!</h1>
+            <h3 id="status">Your turn!</h3>
+            <p>Click any spot to play.</p>
+          </div>
+          <div id="board" class="col s10 offset-s1 m6 offset-m3 l6">
             <div class="row">
               <div class="col s4 spot enabled left top valign-wrapper" id="0"></div>
               <div class="col s4 spot enabled top valign-wrapper" id="1"></div>
