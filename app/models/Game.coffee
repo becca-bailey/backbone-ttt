@@ -16,9 +16,8 @@ Game = Backbone.Model.extend(
 
   endTurn: ->
     @changeTurn()
-    unless @get('isXTurn')
-        @computerMove()
-        @changeTurn();
+    @computerMove()
+    @changeTurn();
 
   getCurrentMarker: ->
     if @get('isXTurn') then 'X' else 'O'
@@ -27,6 +26,7 @@ Game = Backbone.Model.extend(
     board = @get('board')
     board[spotId] = @getCurrentMarker()
     @updateBoard board
+    @endTurn();
 
   updateBoard: (board) ->
     @set 'board': board

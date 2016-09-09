@@ -32,7 +32,6 @@ describe("GameView", function() {
   describe("move", function() {
     beforeEach(function() {
       spyOn(gameView.model, "makeMove");
-      spyOn(gameView.model, "endTurn");
       spyOn(gameView, "disableAllSpots");
 
       click = {currentTarget: $("#0")};
@@ -41,11 +40,6 @@ describe("GameView", function() {
     it("disables all spots if the spot is enabled", function() {
       gameView.move(click);
       expect(gameView.disableAllSpots).toHaveBeenCalled();
-    });
-
-    it("ends the turn", function() {
-      gameView.move(click);
-      expect(gameView.model.endTurn).toHaveBeenCalled();    
     });
 
     it("updates the model if the spot is enabled", function() {

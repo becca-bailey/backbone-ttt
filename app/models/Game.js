@@ -23,10 +23,8 @@ Game = Backbone.Model.extend({
   },
   endTurn: function() {
     this.changeTurn();
-    if (!this.get('isXTurn')) {
-      this.computerMove();
-      return this.changeTurn();
-    }
+    this.computerMove();
+    return this.changeTurn();
   },
   getCurrentMarker: function() {
     if (this.get('isXTurn')) {
@@ -39,7 +37,8 @@ Game = Backbone.Model.extend({
     var board;
     board = this.get('board');
     board[spotId] = this.getCurrentMarker();
-    return this.updateBoard(board);
+    this.updateBoard(board);
+    return this.endTurn();
   },
   updateBoard: function(board) {
     return this.set({

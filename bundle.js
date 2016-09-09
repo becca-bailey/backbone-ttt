@@ -90,10 +90,8 @@ Game = Backbone.Model.extend({
   },
   endTurn: function() {
     this.changeTurn();
-    if (!this.get('isXTurn')) {
-      this.computerMove();
-      return this.changeTurn();
-    }
+    this.computerMove();
+    return this.changeTurn();
   },
   getCurrentMarker: function() {
     if (this.get('isXTurn')) {
@@ -106,7 +104,8 @@ Game = Backbone.Model.extend({
     var board;
     board = this.get('board');
     board[spotId] = this.getCurrentMarker();
-    return this.updateBoard(board);
+    this.updateBoard(board);
+    return this.endTurn();
   },
   updateBoard: function(board) {
     return this.set({
@@ -172,8 +171,7 @@ GameView = Backbone.View.extend({
     spotClicked = $(e.currentTarget);
     if (spotClicked.hasClass('enabled')) {
       this.disableAllSpots();
-      this.model.makeMove(spotClicked.attr('id'));
-      return this.model.endTurn();
+      return this.model.makeMove(spotClicked.attr('id'));
     }
   },
   render: function() {
@@ -197,7 +195,9 @@ GameView = Backbone.View.extend({
   },
   getStatusText: function(status) {
     switch (status) {
-      case "in progress":
+      case !this.model.get('isXTurn'):
+        return "Computer is thinking...";
+      case "in progress" && this.model.get('isXTurn'):
         return "Your turn!";
       case "tie":
         return "It's a tie!";

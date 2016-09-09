@@ -24,10 +24,8 @@ Game = Backbone.Model.extend({
   },
   endTurn: function() {
     this.changeTurn();
-    if (!this.get('isXTurn')) {
-      this.computerMove();
-      return this.changeTurn();
-    }
+    this.computerMove();
+    return this.changeTurn();
   },
   getCurrentMarker: function() {
     if (this.get('isXTurn')) {
@@ -40,7 +38,8 @@ Game = Backbone.Model.extend({
     var board;
     board = this.get('board');
     board[spotId] = this.getCurrentMarker();
-    return this.updateBoard(board);
+    this.updateBoard(board);
+    return this.endTurn();
   },
   updateBoard: function(board) {
     return this.set({
@@ -106,8 +105,7 @@ GameView = Backbone.View.extend({
     spotClicked = $(e.currentTarget);
     if (spotClicked.hasClass('enabled')) {
       this.disableAllSpots();
-      this.model.makeMove(spotClicked.attr('id'));
-      return this.model.endTurn();
+      return this.model.makeMove(spotClicked.attr('id'));
     }
   },
   render: function() {
@@ -131,7 +129,9 @@ GameView = Backbone.View.extend({
   },
   getStatusText: function(status) {
     switch (status) {
-      case "in progress":
+      case !this.model.get('isXTurn'):
+        return "Computer is thinking...";
+      case "in progress" && this.model.get('isXTurn'):
         return "Your turn!";
       case "tie":
         return "It's a tie!";
@@ -27818,6 +27818,19 @@ describe("Game", function() {
     });
   });
 
+  describe("makeMove", function() {
+    it("updates the board", function() {
+      spyOn(game, "updateBoard");
+      game.makeMove(0);
+      expect(game.updateBoard).toHaveBeenCalled();
+    });
+
+    it("updates the board based on the server response", function() {
+      game.makeMove(0);
+      expect(game.get('board')).toEqual(['X', 'X', 'X', 'O', '', '', 'O', '', '']);
+    });
+  });
+
   describe("changeTurn", function() {
     it("toggles the variable isXTurn", function() {
       expect(game.get('isXTurn')).toBe(true);
@@ -27838,9 +27851,9 @@ describe("Game", function() {
 
   describe("endTurn", function() {
     it("changes the turn", function() {
-      game.set({'isXTurn': false});
+      spyOn(game, "changeTurn");
       game.endTurn();
-      expect(game.get('isXTurn')).toBe(true);
+      expect(game.changeTurn).toHaveBeenCalled();
     });
 
     it("calls computerMove if it is the computer's turn", function() {
@@ -27852,7 +27865,6 @@ describe("Game", function() {
 
   describe("updateBoard", function() {
     it("updates the board attribute", function() {
-      expect(game.get('board')).toEqual(initialBoard);
       game.updateBoard(player1Move);
       expect(game.get('board')).toEqual(player1Move);
     });
@@ -27860,7 +27872,6 @@ describe("Game", function() {
 
   describe("updateStatus", function() {
     it("updates the status attribute", function() {
-      expect(game.get('status')).toEqual("in progress");
       game.updateStatus('player1Wins');
       expect(game.get('status')).toEqual("player1Wins");
     });
@@ -27874,13 +27885,11 @@ describe("Game", function() {
     });
 
     it("updates the board", function() {
-      expect(game.get('board')).toEqual(initialBoard);
       game.computerMove();
       expect(game.get('board')).not.toEqual(initialBoard);
     });
 
     it("updates the status", function() {
-      expect(game.get('status')).toEqual("in progress")
       game.computerMove();
       expect(game.get('status')).toEqual("player1Wins");
     });
@@ -27936,7 +27945,6 @@ describe("GameView", function() {
   describe("move", function() {
     beforeEach(function() {
       spyOn(gameView.model, "makeMove");
-      spyOn(gameView.model, "endTurn");
       spyOn(gameView, "disableAllSpots");
 
       click = {currentTarget: $("#0")};
@@ -27945,11 +27953,6 @@ describe("GameView", function() {
     it("disables all spots if the spot is enabled", function() {
       gameView.move(click);
       expect(gameView.disableAllSpots).toHaveBeenCalled();
-    });
-
-    it("ends the turn", function() {
-      gameView.move(click);
-      expect(gameView.model.endTurn).toHaveBeenCalled();    
     });
 
     it("updates the model if the spot is enabled", function() {
