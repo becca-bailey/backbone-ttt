@@ -1,2 +1,11 @@
 node_modules
+app/*.js
+app/models/*.js
+app/views/*.js
+bundle.js
+test_bundle.js
+spec/mocks/*.js
 *.swp
+watchify
+watchify-test
+cs-watch
