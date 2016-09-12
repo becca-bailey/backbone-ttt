@@ -20,27 +20,25 @@ GameView = Backbone.View.extend(
       @model.makeMove spotClicked.attr('id')
 
   render: ->
-    text = @getStatusText(@model.get('status'))
-    $("#status").html(text)
-  
     for i in [0...9]
       marker = @model.get('board')[i]
       $('#' + i).html @getMarkerHTML(marker)
 
+  displayGameStatus: ->
+    text = @getStatusText(@model.get('status'))
+    $("#status").html(text)
+  
   checkGameStatus: ->
+    @displayGameStatus()
     if @model.isOver()
-      @endGame()
-
-  endGame: ->
-    @disableAllSpots()
+      @disableAllSpots()
 
   getStatusText: (status) ->
     switch status
-      when !@model.get('isXTurn') then "Computer is thinking..."
-      when "in progress" && @model.get('isXTurn') then "Your turn!"
       when "tie" then "It's a tie!"
       when "player1Wins" then "X Wins!"
       when "player2Wins" then "O Wins!"
+      when "in progress" then "Your turn!" 
 
   getMarkerHTML: (marker) ->
     htmlclass = if marker == 'X' then 'human-move' else 'computer-move'
