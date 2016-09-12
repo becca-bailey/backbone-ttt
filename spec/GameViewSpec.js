@@ -22,6 +22,12 @@ describe("GameView", function() {
       gameView.render();
       expect($("#0").html()).toEqual("<span class=\"human-move\">X</span>");
     });
+
+    it("displays the game status", function() {
+      spyOn(gameView, "displayGameStatus");
+      gameView.render();
+      expect(gameView.displayGameStatus).toHaveBeenCalled();
+    });
   });
 
   describe("displayGameStatus", function() {
@@ -32,27 +38,16 @@ describe("GameView", function() {
     });
   });
 
-  describe("checkGameStatus", function() {
-    it("displays the game status", function() {
-      spyOn(gameView, "displayGameStatus");
-      gameView.checkGameStatus();
-      expect(gameView.displayGameStatus).toHaveBeenCalled();
-    });
-
-    it("disables the spots if the game is over", function() {
-      spyOn(gameView, "disableAllSpots");
-      gameView.model.updateStatus("player1Wins");
-      gameView.checkGameStatus();
-      expect(gameView.disableAllSpots).toHaveBeenCalled();
-    });
-  });
-
   describe("getStatusText", function() {
     it("changes the status text based on the game status", function() {
       expect(gameView.getStatusText("tie")).toEqual("It's a tie!");
       expect(gameView.getStatusText("player1Wins")).toEqual("X Wins!");
       expect(gameView.getStatusText("player2Wins")).toEqual("O Wins!");
+      
+      gameView.model.set({'isXTurn': true});
       expect(gameView.getStatusText("in progress")).toEqual("Your turn!");
+      gameView.model.changeTurn();
+      expect(gameView.getStatusText("in progress")).toEqual("Computer is thinking...");
     });
   });
 
@@ -80,7 +75,6 @@ describe("GameView", function() {
       gameView.move(click);
       expect(gameView.model.makeMove).not.toHaveBeenCalled();
     });
-
   });
 
   describe("disableAllSpots", function() {
