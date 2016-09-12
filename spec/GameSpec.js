@@ -38,15 +38,23 @@ describe("Game", function() {
   });
 
   describe("makeMove", function() {
-    it("updates the board", function() {
+    beforeEach(function() {
       spyOn(game, "updateBoard");
+      spyOn(game, "changeTurn");
+      spyOn(game, "computerMove");
       game.makeMove(0);
+    });
+  
+    it("updates the board", function() {
       expect(game.updateBoard).toHaveBeenCalled();
     });
 
-    it("updates the board based on the server response", function() {
-      game.makeMove(0);
-      expect(game.get('board')).toEqual(['X', 'X', 'X', 'O', '', '', 'O', '', '']);
+    it("changes the turn", function() {
+      expect(game.changeTurn).toHaveBeenCalled();
+    });
+
+    it("calls computer move", function() {
+      expect(game.computerMove).toHaveBeenCalled();
     });
   });
 
@@ -65,20 +73,6 @@ describe("Game", function() {
       game.changeTurn();
       expect(game.get('isXTurn')).toBe(false);
       expect(game.getCurrentMarker()).toEqual("O");
-    });
-  });
-
-  describe("endTurn", function() {
-    it("changes the turn", function() {
-      spyOn(game, "changeTurn");
-      game.endTurn();
-      expect(game.changeTurn).toHaveBeenCalled();
-    });
-
-    it("calls computerMove if it is the computer's turn", function() {
-      spyOn(game, 'computerMove');
-      game.endTurn();
-      expect(game.computerMove).toHaveBeenCalled();
     });
   });
 
@@ -125,6 +119,26 @@ describe("Game", function() {
       game.updateStatus("player1Wins");
       game.resetAttributes();
       expect(game.get('status')).toEqual("in progress");
+    });
+  });
+
+  describe("updateGameWithResponseData", function() {
+    beforeEach(function() {
+      game.set({'isXTurn': false});
+      response = client.response;
+      game.updateGameWithResponseData(response, game);
+    });
+
+    it("updates the board based on the response data", function() {
+     expect(game.get('board')).toEqual(response.board); 
+    });
+
+    it("updates the status based on the response data", function() {
+      expect(game.get('status')).toEqual(response.status);
+    });
+
+    it("changes the current player", function() {
+      expect(game.get('isXTurn')).toBe(true);
     });
   });
 });

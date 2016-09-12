@@ -14,11 +14,6 @@ Game = Backbone.Model.extend(
   changeTurn: ->
     @set 'isXTurn': !@get('isXTurn')
 
-  endTurn: ->
-    @changeTurn()
-    @computerMove()
-    @changeTurn();
-
   getCurrentMarker: ->
     if @get('isXTurn') then 'X' else 'O'
 
@@ -26,7 +21,8 @@ Game = Backbone.Model.extend(
     board = @get('board')
     board[spotId] = @getCurrentMarker()
     @updateBoard board
-    @endTurn();
+    @changeTurn()
+    @computerMove()
 
   updateBoard: (board) ->
     @set 'board': board
@@ -37,6 +33,7 @@ Game = Backbone.Model.extend(
   updateGameWithResponseData: (response, game) ->
     game.set 'board': response.board
     game.set 'status': response.status
+    game.set 'isXTurn': !game.get('isXTurn')
 
   computerMove: () ->
     json = {board: @get('board'), gameType: "humanVsComputer", computerDifficulty: "hard"}

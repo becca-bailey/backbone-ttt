@@ -20,19 +20,18 @@ GameView = Backbone.View.extend(
       @model.makeMove spotClicked.attr('id')
 
   render: ->
-    text = @getStatusText(@model.get('status'))
-    $("#status").html(text)
-  
     for i in [0...9]
       marker = @model.get('board')[i]
       $('#' + i).html @getMarkerHTML(marker)
 
+  displayGameStatus: ->
+    text = @getStatusText(@model.get('status'))
+    $("#status").html(text)
+  
   checkGameStatus: ->
+    @displayGameStatus()
     if @model.isOver()
-      @endGame()
-
-  endGame: ->
-    @disableAllSpots()
+      @disableAllSpots()
 
   getStatusText: (status) ->
     switch status

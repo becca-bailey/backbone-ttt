@@ -4,9 +4,10 @@ $ = require('jquery')
 
 MockClient = Backbone.Model.extend(
 
+  response: {board: ["X", "X", "X", "O", "", "", "O", "", ""], status: "player1Wins"}
+
   postUpdatedGame: (data, model, onSuccess) ->
-    response = {board: ["X", "X", "X", "O", "", "", "O", "", ""], status: "player1Wins"}
-    onSuccess(response, model)
+    onSuccess(@response, model)
 )
 
 module.exports = MockClient
