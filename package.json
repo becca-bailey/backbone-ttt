@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/beccanelson/backbone-ttt#readme",
   "devDependencies": {
+    "browserify": "^13.1.0",
     "jasmine": "^2.5.0",
     "jasmine-jquery": "^2.1.1",
     "testem": "^1.11.0"

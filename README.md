@@ -9,12 +9,17 @@ A tic tac toe client built with Backbone.js
 With [Node.js](https://nodejs.org/en/) installed: 
 
 + Clone this repository
-+ In the root directory: `npm install`
++ In the root directory: 
+```
+npm install
+./setup
+```
 + Open `index.html` in your browser
 
 ## To run tests:
 
 In the root directory: 
 ```
+./test-setup
 npm test
 ```
