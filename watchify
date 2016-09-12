@@ -1,5 +1,0 @@
-MAIN="app/main.js"
-BUNDLE="bundle.js"
-ECHO "Compiling ${MAIN} into ${BUNDLE}"
-watchify ${MAIN} -o ${BUNDLE}
-

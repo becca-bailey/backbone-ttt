@@ -1,0 +1,7 @@
+MAIN="spec/test.js"
+BUNDLE="test_bundle.js"
+
+ECHO "Compiling .coffee files"
+coffee -bc .
+ECHO "Compiling ${MAIN} into ${BUNDLE}"
+node_modules/.bin/browserify ${MAIN} -o ${BUNDLE}
