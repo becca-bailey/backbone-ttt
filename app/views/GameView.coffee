@@ -36,11 +36,10 @@ GameView = Backbone.View.extend(
 
   getStatusText: (status) ->
     switch status
-      when !@model.get('isXTurn') then "Computer is thinking..."
-      when "in progress" && @model.get('isXTurn') then "Your turn!"
       when "tie" then "It's a tie!"
       when "player1Wins" then "X Wins!"
       when "player2Wins" then "O Wins!"
+      when "in progress" then "Your turn!" 
 
   getMarkerHTML: (marker) ->
     htmlclass = if marker == 'X' then 'human-move' else 'computer-move'
