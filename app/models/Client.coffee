@@ -3,11 +3,14 @@ Backbone = require('backbone')
 $ = require('jquery')
 
 Client = Backbone.Model.extend(
-  defaults:
-    url: "http://stormy-savannah-24890.herokuapp.com/api/computer_move"
+
+  getURL: ->
+    config = @get('config')
+    environment = config.environment
+    config[environment].url + config.computerMove
 
   postUpdatedGame: (data, model, onSuccess)->
-    $.ajax "http://stormy-savannah-24890.herokuapp.com/api/computer_move",
+    $.ajax @getURL(),
       type: 'POST'
       context: model
       crossOrigin: true

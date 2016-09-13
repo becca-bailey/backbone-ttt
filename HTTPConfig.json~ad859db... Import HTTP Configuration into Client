@@ -1,0 +1,10 @@
+{
+ "environment": "production",
+ "production": {
+    "url": "http://stormy-savannah-24890.herokuapp.com/"
+  },
+  "local": {
+    "url": "http://localhost:5000/"
+  },
+  "computerMove": "api/computer_move/"
+}
