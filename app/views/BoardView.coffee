@@ -1,5 +1,6 @@
 Backbone = require('backbone')
 $ = require('jquery')
+classes = require('../../UIConfig').classes
 
 BoardView = Backbone.View.extend(
   el: '#game'
@@ -15,7 +16,7 @@ BoardView = Backbone.View.extend(
 
   move: (e) ->
     spotClicked = $(e.currentTarget)
-    if spotClicked.hasClass 'enabled'
+    if spotClicked.hasClass classes.enabled
       @disableAllSpots()
       @model.makeMove spotClicked.attr('id')
 
@@ -25,7 +26,7 @@ BoardView = Backbone.View.extend(
       $('#' + i).html @getMarkerHTML(marker)
 
   getMarkerHTML: (marker) ->
-    htmlclass = if marker == 'X' then 'human-move' else 'computer-move'
+    htmlclass = if marker == 'X' then classes.x else classes.o
     "<span class=#{htmlclass}>#{marker}</span>"
 
   resetGame: ->
@@ -39,19 +40,19 @@ BoardView = Backbone.View.extend(
 
   enableAllSpots: ->
     @applyToAllSpots ($spot) ->
-      unless $spot.hasClass 'enabled'
-        $spot.addClass 'enabled'
+      unless $spot.hasClass classes.enabled
+        $spot.addClass classes.enabled
 
   disableAllSpots: ->
     @applyToAllSpots ($spot) ->
-      if $spot.hasClass 'enabled'
-        $spot.removeClass 'enabled'
+      if $spot.hasClass classes.enabled
+        $spot.removeClass classes.enabled
 
   enableEmptySpots: ->
     board = @model.get('board')
     @applyToAllSpots ($spot, i) ->
       if board[i] == ""
-        $spot.addClass 'enabled'
+        $spot.addClass classes.enabled
 )
 
 module.exports = BoardView
