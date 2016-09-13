@@ -10,7 +10,8 @@ Client = Backbone.Model.extend(
     config[environment].url + config.computerMove
 
   postUpdatedGame: (data, model, onSuccess)->
-    $.ajax @getURL(),
+    url = @getURL()
+    $.ajax url,
       type: 'POST'
       context: model
       crossOrigin: true

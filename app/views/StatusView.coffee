@@ -1,6 +1,6 @@
 Backbone = require('backbone')
 $ = require('jquery')
-messages = require('../../UIConfig').statusMessages
+messages = require('../../config/UIConfig').statusMessages
 
 StatusView = Backbone.View.extend(
   el: '#status'

@@ -1,6 +1,6 @@
 Backbone = require('backbone')
 $ = require('jquery')
-classes = require('../../UIConfig').classes
+classes = require('../../config/UIConfig').classes
 
 BoardView = Backbone.View.extend(
   el: '#game'
