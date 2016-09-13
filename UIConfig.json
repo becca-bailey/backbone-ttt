@@ -1,0 +1,14 @@
+{
+  "statusMessages": {
+    "player1Wins": "X Wins!",
+    "player2Wins": "O Wins!",
+    "tie": "It's a tie!",
+    "humanTurn": "Your turn!",
+    "computerTurn": "Computer is thinking..."
+  },
+  "classes": {
+    "x": "human-move",
+    "o": "computer-move",
+    "enabled": "enabled"
+  }
+}

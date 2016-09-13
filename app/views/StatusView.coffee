@@ -1,5 +1,6 @@
 Backbone = require('backbone')
 $ = require('jquery')
+messages = require('../../UIConfig').statusMessages
 
 StatusView = Backbone.View.extend(
   el: '#status'
@@ -13,16 +14,16 @@ StatusView = Backbone.View.extend(
 
   getStatusText: (status) ->
     switch status
-      when "tie" then "It's a tie!"
-      when "player1Wins" then "X Wins!"
-      when "player2Wins" then "O Wins!"
+      when "tie" then messages.tie
+      when "player1Wins" then messages.player1Wins
+      when "player2Wins" then messages.player2Wins
       when "in progress" then @getInProgressText()
 
   getInProgressText: ->
     if @model.get('isXTurn')
-      "Your turn!"
+      messages.humanTurn
     else 
-      "Computer is thinking..."
+      messages.computerTurn
 )
 
 module.exports = StatusView
