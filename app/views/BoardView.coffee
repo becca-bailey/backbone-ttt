@@ -25,7 +25,7 @@ BoardView = Backbone.View.extend(
       $('#' + i).html @getMarkerHTML(marker)
 
   getMarkerHTML: (marker) ->
-    htmlclass = if marker == 'X' then 'human-move' else 'computer-move' 
+    htmlclass = if marker == 'X' then 'human-move' else 'computer-move'
     "<span class=#{htmlclass}>#{marker}</span>"
 
   resetGame: ->
@@ -36,15 +36,15 @@ BoardView = Backbone.View.extend(
     for i in [0...9]
       $spot = $('#' + i)
       functionToApply($spot, i)
-    
+
   enableAllSpots: ->
     @applyToAllSpots ($spot) ->
       unless $spot.hasClass 'enabled'
         $spot.addClass 'enabled'
 
-  disableAllSpots: -> 
+  disableAllSpots: ->
     @applyToAllSpots ($spot) ->
-      if $spot.hasClass 'enabled' 
+      if $spot.hasClass 'enabled'
         $spot.removeClass 'enabled'
 
   enableEmptySpots: ->
