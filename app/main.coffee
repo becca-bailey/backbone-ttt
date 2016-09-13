@@ -7,7 +7,7 @@ Client = require('./models/Client')
 Router = Backbone.Router.extend(
   routes: '': 'main'
   main: ->
-    client = new Client
+    client = new Client(config: require('../HTTPConfig.json'))
     game = new Game(client: client)
     boardView = new BoardView(model: game)
     statusView = new StatusView(model: game)

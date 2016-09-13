@@ -1,0 +1,10 @@
+{
+ "environment": "production",
+ "production": {
+    "url": "http://production-url.com/"
+  },
+  "local": {
+    "url": "http://local-url.com"
+  },
+  "computerMove": "api/computer_move/"
+}
