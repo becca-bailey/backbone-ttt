@@ -1,4 +1,5 @@
 require('jasmine');
 require('jasmine-jquery');
 require('./GameSpec');
-require('./GameViewSpec');
+require('./BoardViewSpec');
+require('./StatusViewSpec');
