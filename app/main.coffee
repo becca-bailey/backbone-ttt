@@ -5,6 +5,7 @@ BoardView = require('./views/BoardView')
 StatusView = require('./views/StatusView')
 Client = require('./models/Client')
 httpConfig = require('../config/HTTPConfig')
+HandlebarsCompiler = require('./http/HandlebarsCompiler')
 
 Router = Backbone.Router.extend(
   routes: '': 'main'
@@ -16,5 +17,8 @@ Router = Backbone.Router.extend(
 )
 
 $(document).ready ->
+  compiler = new HandlebarsCompiler
+  compiler.load("board")
+  compiler.load("status")
   router = new Router
   Backbone.history.start()

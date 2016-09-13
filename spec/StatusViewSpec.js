@@ -6,7 +6,7 @@ describe("StatusView", function() {
   beforeEach(function() {
     game = new Game();
     statusView = new StatusView({model: game});
-    jasmine.getFixtures().fixturesPath = './spec/fixtures';
+    jasmine.getFixtures().fixturesPath = '../partials';
     jasmine.getFixtures().load('status.html');
   });
 

@@ -8,7 +8,7 @@ describe("BoardView", function() {
   beforeEach(function() {
     game = new Game();
     boardView = new BoardView({model: game});
-    jasmine.getFixtures().fixturesPath = './spec/fixtures';
+    jasmine.getFixtures().fixturesPath = '../partials';
     jasmine.getFixtures().load('board.html');
   });
 

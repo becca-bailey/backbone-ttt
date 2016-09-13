@@ -13,13 +13,15 @@ With [Node.js](https://nodejs.org/en/) installed:
 ```
 npm install
 ./setup
+npm start 
 ```
-+ Open `index.html` in your browser
++ Open `http://localhost:9966/` in your browser
 
 ## To run tests:
 
 In the root directory: 
 ```
+npm install
 ./test-setup
 npm test
 ```

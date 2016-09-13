@@ -9,7 +9,6 @@ BoardView = Backbone.View.extend(
     'click #play-again': 'resetGame'
 
   initialize: ->
-    $('.spot').height $('.spot').width()
     @listenTo @model, 'change', @render
     @listenTo @model, 'change:board', @enableEmptySpots
     @listenTo @model, 'change:status', @disableAllSpots
