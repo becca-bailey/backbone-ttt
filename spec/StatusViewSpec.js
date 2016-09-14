@@ -14,6 +14,10 @@ describe("StatusView", function() {
     expect(statusView).toBeDefined()
   });
 
+  it("renders the status view when it is initialized", function() {
+    expect($("#status")).toBeDefined();
+  });
+
   describe("render", function() {
     it("displays the game status", function() {
       statusView.model.updateStatus("tie");

@@ -4,12 +4,14 @@ Handlebars = require('handlebars')
 
 HandlebarsCompiler = Backbone.Model.extend(
 
-  load: (templateName) ->
+  load: (templateName, onCompletion) ->
     $.ajax "../partials/#{templateName}.html",
       success: (data) ->
         template = Handlebars.compile(data)
-        $("##{templateName}-container").html(template)
-        $(".spot").height $(".spot").width()
+        onCompletion template
+
+  appendToContainer: (container, template) ->
+    $(container).html(template)
 )
 
 module.exports = HandlebarsCompiler

@@ -16,6 +16,10 @@ describe("BoardView", function() {
     expect(boardView).toBeDefined()
   });
 
+  it("renders the board view when it is initialized", function() {
+    expect($("#board")).toBeDefined();
+  });
+
   describe("render", function() {
     it("renders the board", function() {
       boardView.model.updateBoard(newBoard);

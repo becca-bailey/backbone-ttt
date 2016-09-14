@@ -1,4 +1,5 @@
 Backbone = require('backbone')
+HandlebarsCompiler = require('../http/HandlebarsCompiler')
 $ = require('jquery')
 classes = require('../../config/UIConfig').classes
 
@@ -9,6 +10,14 @@ BoardView = Backbone.View.extend(
     'click #play-again': 'resetGame'
 
   initialize: ->
+    compiler = new HandlebarsCompiler
+    compiler.load("game", (template)->
+      compiler.appendToContainer("#game-container", template))
+
+    compiler.load("board", (template)->
+      compiler.appendToContainer("#board-container", template)
+      $(".spot").height $(".spot").width())
+
     @listenTo @model, 'change', @render
     @listenTo @model, 'change:board', @enableEmptySpots
     @listenTo @model, 'change:status', @disableAllSpots
