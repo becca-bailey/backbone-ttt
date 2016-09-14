@@ -16,10 +16,14 @@ describe("BoardView", function() {
     expect(boardView).toBeDefined()
   });
 
-  describe("render", function() {
+  it("renders the board when it is initialized", function() {
+    expect($("#board")).toBeDefined()
+  });
+
+  describe("showBoard", function() {
     it("renders the board", function() {
       boardView.model.updateBoard(newBoard);
-      boardView.render();
+      boardView.showBoard();
       expect($("#0").html()).toEqual("<span class=\"human-move\">X</span>");
     });
   });
@@ -75,7 +79,7 @@ describe("BoardView", function() {
       boardView.render();
       boardView.disableAllSpots();
       boardView.enableEmptySpots();
-    });      
+    });
 
     it("enables only empty spots on the board", function() {
       expect($("#0")).not.toHaveClass("enabled");
@@ -108,4 +112,3 @@ describe("BoardView", function() {
     });
   });
 });
-

@@ -5,7 +5,6 @@ BoardView = require('./views/BoardView')
 StatusView = require('./views/StatusView')
 Client = require('./models/Client')
 httpConfig = require('../config/HTTPConfig')
-HandlebarsCompiler = require('./http/HandlebarsCompiler')
 
 Router = Backbone.Router.extend(
   routes: '': 'main'
@@ -18,7 +17,15 @@ Router = Backbone.Router.extend(
 
 $(document).ready ->
   compiler = new HandlebarsCompiler
-  compiler.load("board")
-  compiler.load("status")
+  compiler.load("menu", (template)->
+    compiler.appendToContainer("#menu-container", template))
+
+  compiler.load("board", (template)->
+    compiler.appendToContainer("#board-container", template)
+    $(".spot").height $(".spot").width())
+
+  compiler.load("status", (template)->
+    compiler.appendToContainer("#status-container", template))
+
   router = new Router
   Backbone.history.start()

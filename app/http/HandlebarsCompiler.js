@@ -8,15 +8,17 @@ Backbone = require('backbone');
 Handlebars = require('handlebars');
 
 HandlebarsCompiler = Backbone.Model.extend({
-  load: function(templateName) {
+  load: function(templateName, onCompletion) {
     return $.ajax("../partials/" + templateName + ".html", {
       success: function(data) {
         var template;
         template = Handlebars.compile(data);
-        $("#" + templateName + "-container").html(template);
-        return $(".spot").height($(".spot").width());
+        return onCompletion(template);
       }
     });
+  },
+  appendToContainer: function(container, template) {
+    return $(container).html(template);
   }
 });
 

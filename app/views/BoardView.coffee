@@ -1,17 +1,29 @@
 Backbone = require('backbone')
+HandlebarsCompiler = require('../http/HandlebarsCompiler')
 $ = require('jquery')
 classes = require('../../config/UIConfig').classes
 
 BoardView = Backbone.View.extend(
-  el: '#game'
+  el: '#game-container'
   events:
     'click .spot': 'move'
     'click #play-again': 'resetGame'
 
   initialize: ->
-    @listenTo @model, 'change', @render
+    @render()
+    @listenTo @model, 'change', @showBoard
     @listenTo @model, 'change:board', @enableEmptySpots
     @listenTo @model, 'change:status', @disableAllSpots
+
+  render: ->
+    compiler = new HandlebarsCompiler
+    compiler.load("game", (template)->
+      compiler.appendToContainer("#game-container", template))
+
+    compiler.load("board", (template)->
+      compiler.appendToContainer("#board-container", template)
+      $(".spot").height $(".spot").width())
+
 
   move: (e) ->
     spotClicked = $(e.currentTarget)
@@ -19,7 +31,7 @@ BoardView = Backbone.View.extend(
       @disableAllSpots()
       @model.makeMove spotClicked.attr('id')
 
-  render: ->
+  showBoard: ->
     for i in [0...9]
       marker = @model.get('board')[i]
       $('#' + i).html @getMarkerHTML(marker)
