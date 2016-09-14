@@ -3,7 +3,7 @@ Backbone = require('backbone')
 HumanVsComputerGame = require('./models/HumanVsComputerGame')
 BoardView = require('./views/BoardView')
 StatusView = require('./views/StatusView')
-Client = require('./models/Client')
+Client = require('./http/Client')
 httpConfig = require('../config/HTTPConfig')
 
 Router = Backbone.Router.extend(

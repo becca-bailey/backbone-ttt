@@ -1,4 +1,4 @@
-var Client = require("../app/models/Client");
+var Client = require("../app/http/Client");
 
 describe("Client", function() {
   beforeEach(function() {
