@@ -1,7 +1,13 @@
 MAIN="app/main.js"
 BUNDLE="bundle.js"
+TEST_MAIN="spec/test.js"
+TEST_BUNDLE="test_bundle.js"
 
 ECHO "Compiling .coffee files"
 node_modules/.bin/coffee -bc .
+
 ECHO "Compiling ${MAIN} into ${BUNDLE}"
 node_modules/.bin/browserify ${MAIN} -o ${BUNDLE}
+
+ECHO "Compiling ${TEST_MAIN} into ${TEST_BUNDLE}"
+node_modules/.bin/browserify ${TEST_MAIN} -o ${TEST_BUNDLE}

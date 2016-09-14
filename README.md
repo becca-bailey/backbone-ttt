@@ -22,6 +22,6 @@ npm start
 In the root directory: 
 ```
 npm install
-./test-setup
+./setup
 npm test
 ```
