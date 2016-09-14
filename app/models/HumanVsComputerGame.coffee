@@ -1,21 +1,7 @@
-require('coffee-script')
-Backbone = require('backbone')
 $ = require('jquery')
+Game = require('./Game')
 
-Game = Backbone.Model.extend(
-  defaults:
-    board: ['','','','','','','','','']
-    status: 'in progress'
-    isXTurn: true
-
-  isOver: ->
-    @get('status') != 'in progress'
-
-  changeTurn: ->
-    @set 'isXTurn': !@get('isXTurn')
-
-  getCurrentMarker: ->
-    if @get('isXTurn') then 'X' else 'O'
+HumanVsComputerGame = Game.extend(
 
   makeMove: (spotId) ->
     board = @get('board')
@@ -23,12 +9,6 @@ Game = Backbone.Model.extend(
     @updateBoard board
     @changeTurn()
     @computerMove()
-
-  updateBoard: (board) ->
-    @set 'board': board
-
-  updateStatus: (status) ->
-    @set 'status': status
 
   updateGameWithResponseData: (response, game) ->
     game.set 'board': response.board
@@ -40,10 +20,6 @@ Game = Backbone.Model.extend(
     data = JSON.stringify(json)
     client = @get 'client'
     client.postUpdatedGame(data, this, @updateGameWithResponseData)
-
-  resetAttributes: ->
-    @set @defaults
-    @set 'board': ['','','','','','','','','']
 )
 
-module.exports = Game
+module.exports = HumanVsComputerGame
