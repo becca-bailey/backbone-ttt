@@ -28,6 +28,27 @@ describe("BoardView", function() {
     });
   });
 
+  describe("update", function() {
+    it("shows the board", function() {
+      spyOn(boardView, "showBoard");
+      boardView.update();
+      expect(boardView.showBoard).toHaveBeenCalled();
+    });
+
+    it("disables the spots if the game is over", function() {
+      boardView.model.updateStatus("tie");
+      spyOn(boardView, "disableAllSpots");
+      boardView.update();
+      expect(boardView.disableAllSpots).toHaveBeenCalled();
+    });
+
+    it("enables the empty spots if the game is in progress", function() {
+      spyOn(boardView, "enableEmptySpots");
+      boardView.update();
+      expect(boardView.enableEmptySpots).toHaveBeenCalled();
+    });
+  });
+
   describe("move", function() {
     beforeEach(function() {
       spyOn(boardView.model, "makeMove");

@@ -8,21 +8,36 @@ Backbone = require('backbone');
 $ = require('jquery');
 
 Client = Backbone.Model.extend({
-  getURL: function() {
+  getURL: function(player) {
     var config, environment;
     config = this.get('config');
     environment = config.environment;
-    return config[environment].url + config.computerMove;
+    if (player === "human") {
+      return config[environment].url + config.humanMove;
+    } else {
+      return config[environment].url + config.computerMove;
+    }
   },
   postUpdatedGame: function(data, model, onSuccess) {
     var url;
-    url = this.getURL();
+    url = this.getURL("computer");
     return $.ajax(url, {
       type: 'POST',
       context: model,
       crossOrigin: true,
       dataType: 'json',
       data: data,
+      success: function(response) {
+        return onSuccess(response, model);
+      }
+    });
+  },
+  getGameStatus: function(parameters, model, onSuccess) {
+    var url;
+    url = this.getURL("human") + parameters;
+    return $.ajax(url, {
+      crossOrigin: true,
+      dataType: 'json',
       success: function(response) {
         return onSuccess(response, model);
       }

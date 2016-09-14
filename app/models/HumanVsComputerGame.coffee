@@ -15,7 +15,7 @@ HumanVsComputerGame = Game.extend(
     game.set 'status': response.status
     game.set 'isXTurn': !game.get('isXTurn')
 
-  computerMove: () ->
+  computerMove: ->
     json = {board: @get('board'), gameType: "humanVsComputer", computerDifficulty: "hard"}
     data = JSON.stringify(json)
     client = @get 'client'

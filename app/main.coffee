@@ -1,10 +1,12 @@
 $ = require('jquery')
 Backbone = require('backbone')
 HumanVsComputerGame = require('./models/HumanVsComputerGame')
+HumanVsHumanGame = require('./models/HumanVsHumanGame')
 BoardView = require('./views/BoardView')
 StatusView = require('./views/StatusView')
 Client = require('./http/Client')
 httpConfig = require('../config/HTTPConfig')
+client = new Client(config: httpConfig)
 
 Router = Backbone.Router.extend(
   routes:
@@ -13,14 +15,17 @@ Router = Backbone.Router.extend(
     'humanvshuman(/)': 'humanVsHuman'
 
   main: ->
-    client = new Client(config: httpConfig)
     game = new HumanVsComputerGame(client: client)
     boardView = new BoardView(model: game)
     statusView = new StatusView(model: game)
 
   humanVsComputer: ->
-    client = new Client(config: httpConfig)
     game = new HumanVsComputerGame(client: client)
+    boardView = new BoardView(model: game)
+    statusView = new StatusView(model: game)
+
+  humanVsHuman: ->
+    game = new HumanVsHumanGame(client: client)
     boardView = new BoardView(model: game)
     statusView = new StatusView(model: game)
 )
