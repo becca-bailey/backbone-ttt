@@ -1,10 +1,10 @@
 var StatusView = require('../app/views/StatusView');
-var Game = require('../app/models/Game');
+var HumanVsComputerGame = require('../app/models/HumanVsComputerGame');
 var $ = require('jquery');
 
 describe("StatusView", function() {
   beforeEach(function() {
-    game = new Game();
+    game = new HumanVsComputerGame();
     statusView = new StatusView({model: game});
     jasmine.getFixtures().fixturesPath = '../partials';
     jasmine.getFixtures().load('status.html');

@@ -11,9 +11,7 @@ BoardView = Backbone.View.extend(
 
   initialize: ->
     @render()
-    @listenTo @model, 'change', @showBoard
-    @listenTo @model, 'change:board', @enableEmptySpots
-    @listenTo @model, 'change:status', @disableAllSpots
+    @listenTo @model, 'change', @update
 
   render: ->
     compiler = new HandlebarsCompiler
@@ -24,12 +22,18 @@ BoardView = Backbone.View.extend(
       compiler.appendToContainer("#board-container", template)
       $(".spot").height $(".spot").width())
 
-
   move: (e) ->
     spotClicked = $(e.currentTarget)
     if spotClicked.hasClass classes.enabled
       @disableAllSpots()
       @model.makeMove spotClicked.attr('id')
+
+  update: ->
+    @showBoard()
+    if @model.isOver()
+      @disableAllSpots()
+    else
+      @enableEmptySpots()
 
   showBoard: ->
     for i in [0...9]

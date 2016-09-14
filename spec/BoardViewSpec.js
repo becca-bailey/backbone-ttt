@@ -1,12 +1,12 @@
 var BoardView = require('../app/views/BoardView');
-var Game = require('../app/models/Game');
+var HumanVsComputerGame = require('../app/models/HumanVsComputerGame');
 var $ = require('jquery');
 
 describe("BoardView", function() {
   var newBoard = ["X", "", "", "", "", "", "", "", ""];
 
   beforeEach(function() {
-    game = new Game();
+    game = new HumanVsComputerGame();
     boardView = new BoardView({model: game});
     jasmine.getFixtures().fixturesPath = '../partials';
     jasmine.getFixtures().load('board.html');
@@ -25,6 +25,27 @@ describe("BoardView", function() {
       boardView.model.updateBoard(newBoard);
       boardView.showBoard();
       expect($("#0").html()).toEqual("<span class=\"human-move\">X</span>");
+    });
+  });
+
+  describe("update", function() {
+    it("shows the board", function() {
+      spyOn(boardView, "showBoard");
+      boardView.update();
+      expect(boardView.showBoard).toHaveBeenCalled();
+    });
+
+    it("disables the spots if the game is over", function() {
+      boardView.model.updateStatus("tie");
+      spyOn(boardView, "disableAllSpots");
+      boardView.update();
+      expect(boardView.disableAllSpots).toHaveBeenCalled();
+    });
+
+    it("enables the empty spots if the game is in progress", function() {
+      spyOn(boardView, "enableEmptySpots");
+      boardView.update();
+      expect(boardView.enableEmptySpots).toHaveBeenCalled();
     });
   });
 

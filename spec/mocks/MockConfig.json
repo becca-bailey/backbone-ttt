@@ -6,5 +6,6 @@
   "local": {
     "url": "http://local-url.com"
   },
-  "computerMove": "api/computer_move/"
+  "computerMove": "api/computer_move/",
+  "humanMove": "api/status/"
 }
