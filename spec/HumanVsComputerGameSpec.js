@@ -1,4 +1,4 @@
-var Game = require("../app/models/Game");
+var HumanVsComputerGame = require("../app/models/HumanVsComputerGame");
 var MockClient = require("./mocks/MockClient");
 
 describe("Game", function() {
@@ -7,7 +7,7 @@ describe("Game", function() {
 
   beforeEach(function() {
     client = new MockClient();
-    game = new Game({client: client});
+    game = new HumanVsComputerGame({client: client});
   });
 
   it("is initialized with an empty board", function() {

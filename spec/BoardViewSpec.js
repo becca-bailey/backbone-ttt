@@ -1,12 +1,12 @@
 var BoardView = require('../app/views/BoardView');
-var Game = require('../app/models/Game');
+var HumanVsComputerGame = require('../app/models/HumanVsComputerGame');
 var $ = require('jquery');
 
 describe("BoardView", function() {
   var newBoard = ["X", "", "", "", "", "", "", "", ""];
 
   beforeEach(function() {
-    game = new Game();
+    game = new HumanVsComputerGame();
     boardView = new BoardView({model: game});
     jasmine.getFixtures().fixturesPath = '../partials';
     jasmine.getFixtures().load('board.html');
