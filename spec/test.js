@@ -1,5 +1,6 @@
 require('jasmine');
 require('jasmine-jquery');
+require('jasmine-sinon');
 require('./GameSpec');
 require('./HumanVsComputerGameSpec');
 require('./HumanVsHumanGameSpec');
@@ -8,3 +9,4 @@ require('./StatusViewSpec');
 require('./MenuViewSpec');
 require('./GameViewSpec');
 require('./ClientSpec');
+require('./RouterSpec');
