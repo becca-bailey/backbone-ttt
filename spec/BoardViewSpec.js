@@ -117,19 +117,4 @@ describe("BoardView", function() {
     });
   });
 
-  describe("resetGame", function() {
-    beforeEach(function() {
-      spyOn(boardView.model, "resetAttributes");
-      spyOn(boardView, "enableAllSpots");
-      boardView.resetGame();
-    });
-
-    it("resets all attributes in the model", function() {
-      expect(boardView.model.resetAttributes).toHaveBeenCalled();
-    });
-
-    it("enables all spots", function() {
-      expect(boardView.enableAllSpots).toHaveBeenCalled();
-    });
-  });
 });
