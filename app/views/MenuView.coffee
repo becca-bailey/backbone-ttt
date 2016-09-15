@@ -1,6 +1,6 @@
 Backbone = require('backbone')
-HandlebarsCompiler = require('../http/HandlebarsCompiler')
 $ = require('jquery')
+HandlebarsCompiler = require('../http/HandlebarsCompiler')
 
 MenuView = Backbone.View.extend(
   el: '#menu-container'

@@ -1,11 +1,15 @@
 var Game = require("../app/models/Game");
+var MockClient = require('./mocks/MockClient');
+var HandlebarsCompiler = require("../app/http/HandlebarsCompiler");
 
 describe("Game", function() {
   var initialBoard = ["", "", "", "", "", "", "", "", ""];
   var player1Move = ["X", "", "", "", "", "", "", "", ""]
 
   beforeEach(function() {
-    game = new Game();
+    var client = new MockClient();
+    var compiler = new HandlebarsCompiler();
+    game = new Game({client: client, compiler: compiler});
   });
 
   it("is initialized with an empty board", function() {
@@ -16,6 +20,14 @@ describe("Game", function() {
   it("is initialized with a status", function() {
     var status = game.get('status');
     expect(status).toEqual("in progress");
+  });
+
+  it("can be initialized with a client", function() {
+    expect(game.get('client')).toBeDefined();
+  });
+
+  it("can be initialized with a compiler", function() {
+    expect(game.get('compiler')).toBeDefined();
   });
 
   describe("isOver", function() {

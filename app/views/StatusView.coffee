@@ -1,7 +1,6 @@
 $ = require('jquery')
 _ = require('underscore')
 Backbone = require('backbone')
-HandlebarsCompiler = require('../http/HandlebarsCompiler')
 messages = require('../../config/UIConfig').statusMessages
 
 StatusView = Backbone.View.extend(
@@ -12,7 +11,7 @@ StatusView = Backbone.View.extend(
     @listenTo @model, 'change', @showStatus
 
   render: ->
-    compiler = new HandlebarsCompiler
+    compiler = @model.get('compiler')
     compiler.load("status", _.bind(((template)->
       compiler.appendToContainer("#status-container", template)
       @showStatus()), this))

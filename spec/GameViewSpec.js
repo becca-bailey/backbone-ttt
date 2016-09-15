@@ -1,10 +1,12 @@
 var GameView = require('../app/views/GameView');
 var HumanVsComputerGame = require('../app/models/HumanVsComputerGame');
 var $ = require('jquery');
+var HandlebarsCompiler = require('../app/http/HandlebarsCompiler');
 
 describe("GameView", function() {
   beforeEach(function() {
-    game = new HumanVsComputerGame();
+    compiler = new HandlebarsCompiler()
+    game = new HumanVsComputerGame({compiler: compiler});
     gameView = new GameView({model: game});
     jasmine.getFixtures().fixturesPath = '../partials';
     jasmine.getFixtures().load('game.html');

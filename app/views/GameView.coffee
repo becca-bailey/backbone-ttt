@@ -1,7 +1,6 @@
 $ = require('jquery')
 _ = require('underscore')
 Backbone = require('backbone')
-HandlebarsCompiler = require('../http/HandlebarsCompiler')
 BoardView = require('./BoardView')
 StatusView = require('./StatusView')
 
@@ -14,7 +13,7 @@ GameView = Backbone.View.extend(
     @render()
 
   render: ->
-    compiler = new HandlebarsCompiler
+    compiler = @model.get('compiler')
     compiler.load("game", _.bind(((template)->
       compiler.appendToContainer("#game-container", template)
       @boardView = new BoardView(model: @model)

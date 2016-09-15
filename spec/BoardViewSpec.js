@@ -1,12 +1,14 @@
 var BoardView = require('../app/views/BoardView');
 var HumanVsComputerGame = require('../app/models/HumanVsComputerGame');
 var $ = require('jquery');
+var HandlebarsCompiler = require('../app/http/HandlebarsCompiler');
 
 describe("BoardView", function() {
   var newBoard = ["X", "", "", "", "", "", "", "", ""];
 
   beforeEach(function() {
-    game = new HumanVsComputerGame();
+    compiler = new HandlebarsCompiler()
+    game = new HumanVsComputerGame({compiler: compiler});
     boardView = new BoardView({model: game});
     jasmine.getFixtures().fixturesPath = '../partials';
     jasmine.getFixtures().load('board.html');
