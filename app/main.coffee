@@ -4,6 +4,7 @@ HumanVsComputerGame = require('./models/HumanVsComputerGame')
 HumanVsHumanGame = require('./models/HumanVsHumanGame')
 BoardView = require('./views/BoardView')
 StatusView = require('./views/StatusView')
+MenuView = require('./views/MenuView')
 Client = require('./http/Client')
 httpConfig = require('../config/HTTPConfig')
 client = new Client(config: httpConfig)
@@ -15,9 +16,7 @@ Router = Backbone.Router.extend(
     'humanvshuman(/)': 'humanVsHuman'
 
   main: ->
-    game = new HumanVsComputerGame(client: client)
-    boardView = new BoardView(model: game)
-    statusView = new StatusView(model: game)
+    menuView = new MenuView()
 
   humanVsComputer: ->
     game = new HumanVsComputerGame(client: client)
@@ -32,4 +31,4 @@ Router = Backbone.Router.extend(
 
 $(document).ready ->
   router = new Router
-  Backbone.history.start(pushState: true)
+  Backbone.history.start()

@@ -5,7 +5,7 @@ Handlebars = require('handlebars')
 HandlebarsCompiler = Backbone.Model.extend(
 
   load: (templateName, onCompletion) ->
-    $.ajax "../partials/#{templateName}.html",
+    $.ajax "./partials/#{templateName}.html",
       success: (data) ->
         template = Handlebars.compile(data)
         onCompletion(template)
