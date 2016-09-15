@@ -1,6 +1,8 @@
 var StatusView = require('../app/views/StatusView');
 var HumanVsComputerGame = require('../app/models/HumanVsComputerGame');
+var HumanVsHumanGame = require('../app/models/HumanVsHumanGame');
 var $ = require('jquery');
+messages = require('../config/UIConfig').statusMessages
 
 describe("StatusView", function() {
   beforeEach(function() {
@@ -22,20 +24,33 @@ describe("StatusView", function() {
     it("displays the game status", function() {
       statusView.model.updateStatus("tie");
       statusView.showStatus();
-      expect($("#status").html()).toEqual("It's a tie!")
+      expect($("#status").html()).toEqual(messages.tie)
     });
   });
 
   describe("getStatusText", function() {
-    it("changes the status text based on the game status", function() {
-      expect(statusView.getStatusText("tie")).toEqual("It's a tie!");
-      expect(statusView.getStatusText("player1Wins")).toEqual("X Wins!");
-      expect(statusView.getStatusText("player2Wins")).toEqual("O Wins!");
+    it("changes the winning text based on the game status", function() {
+      expect(statusView.getStatusText("tie")).toEqual(messages.tie);
+      expect(statusView.getStatusText("player1Wins")).toEqual(messages.player1Wins);
+      expect(statusView.getStatusText("player2Wins")).toEqual(messages.player2Wins);
+    });
 
+
+    it("returns in-progress text for a human vs. computer game", function() {
       statusView.model.set({'isXTurn': true});
-      expect(statusView.getStatusText("in progress")).toEqual("Your turn!");
+      expect(statusView.getStatusText("in progress")).toEqual(messages.humanTurn);
       statusView.model.changeTurn();
-      expect(statusView.getStatusText("in progress")).toEqual("Computer is thinking...");
+      expect(statusView.getStatusText("in progress")).toEqual(messages.computerTurn);
+    });
+
+    it("returns in-progress text for a human vs. human game", function() {
+      var hvhgame = new HumanVsHumanGame();
+      statusView = new StatusView({model: hvhgame});
+      
+      statusView.model.set({'isXTurn': true});
+      expect(statusView.getStatusText("in progress")).toEqual(messages.xTurn);
+      statusView.model.changeTurn();
+      expect(statusView.getStatusText("in progress")).toEqual(messages.oTurn);
     });
   });
 });
