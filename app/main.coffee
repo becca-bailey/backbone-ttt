@@ -31,4 +31,4 @@ Router = Backbone.Router.extend(
 
 $(document).ready ->
   router = new Router
-  Backbone.history.start(pushState: true)
+  Backbone.history.start()
