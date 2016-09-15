@@ -5,4 +5,5 @@ require('./HumanVsComputerGameSpec');
 require('./HumanVsHumanGameSpec');
 require('./BoardViewSpec');
 require('./StatusViewSpec');
+require('./MenuViewSpec');
 require('./ClientSpec');
