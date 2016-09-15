@@ -1,7 +1,11 @@
 $ = require('jquery')
 Game = require('./Game')
+messages = require('../../config/UIConfig').statusMessages
 
 HumanVsHumanGame = Game.extend(
+  player1TurnMessage: messages.xTurn
+  player2TurnMessage: messages.oTurn
+
   makeMove: (spotId) ->
     board = @get('board')
     board[spotId] = @getCurrentMarker()

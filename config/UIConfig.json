@@ -4,7 +4,9 @@
     "player2Wins": "O Wins!",
     "tie": "It's a tie!",
     "humanTurn": "Your turn!",
-    "computerTurn": "Computer is thinking..."
+    "computerTurn": "Computer is thinking...",
+    "xTurn": "X's Turn!",
+    "oTurn": "O's Turn!"
   },
   "classes": {
     "x": "human-move",

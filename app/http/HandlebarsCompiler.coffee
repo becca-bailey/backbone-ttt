@@ -8,7 +8,7 @@ HandlebarsCompiler = Backbone.Model.extend(
     $.ajax "../partials/#{templateName}.html",
       success: (data) ->
         template = Handlebars.compile(data)
-        onCompletion template
+        onCompletion(template)
 
   appendToContainer: (container, template) ->
     $(container).html(template)

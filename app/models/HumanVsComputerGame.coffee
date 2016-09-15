@@ -1,7 +1,10 @@
 $ = require('jquery')
 Game = require('./Game')
+messages = require('../../config/UIConfig').statusMessages
 
 HumanVsComputerGame = Game.extend(
+  player1TurnMessage: messages.humanTurn
+  player2TurnMessage: messages.computerTurn
 
   makeMove: (spotId) ->
     board = @get('board')

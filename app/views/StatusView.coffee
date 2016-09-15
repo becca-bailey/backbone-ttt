@@ -12,8 +12,9 @@ StatusView = Backbone.View.extend(
 
   render: ->
     compiler = new HandlebarsCompiler
-    compiler.load("status", (template)->
-      compiler.appendToContainer("#status-container", template))
+    compiler.load("status", ((template)->
+      compiler.appendToContainer("#status-container", template)
+      @showStatus()).bind(this))
 
   showStatus: ->
     text = @getStatusText(@model.get('status'))
@@ -28,9 +29,9 @@ StatusView = Backbone.View.extend(
 
   getInProgressText: ->
     if @model.get('isXTurn')
-      messages.humanTurn
+      @model.player1TurnMessage 
     else
-      messages.computerTurn
+      @model.player2TurnMessage
 )
 
 module.exports = StatusView
