@@ -5,7 +5,7 @@ HandlebarsCompiler = require('../http/HandlebarsCompiler')
 messages = require('../../config/UIConfig').statusMessages
 
 StatusView = Backbone.View.extend(
-  el: '#status'
+  el: '#status-container'
 
   initialize: ->
     @render()

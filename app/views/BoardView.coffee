@@ -4,10 +4,9 @@ $ = require('jquery')
 classes = require('../../config/UIConfig').classes
 
 BoardView = Backbone.View.extend(
-  el: '#game-container'
+  el: '#board-container'
   events:
     'click .spot': 'move'
-    'click #play-again': 'resetGame'
 
   initialize: ->
     @render()
@@ -15,9 +14,6 @@ BoardView = Backbone.View.extend(
 
   render: ->
     compiler = new HandlebarsCompiler
-    compiler.load("game", (template)->
-      compiler.appendToContainer("#game-container", template))
-
     compiler.load("board", (template)->
       compiler.appendToContainer("#board-container", template)
       $(".spot").height $(".spot").width())
@@ -43,10 +39,6 @@ BoardView = Backbone.View.extend(
   getMarkerHTML: (marker) ->
     htmlclass = if marker == 'X' then classes.x else classes.o
     "<span class=#{htmlclass}>#{marker}</span>"
-
-  resetGame: ->
-    @model.resetAttributes()
-    @enableAllSpots()
 
   applyToAllSpots: (functionToApply) ->
     for i in [0...9]
