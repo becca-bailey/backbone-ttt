@@ -18,28 +18,27 @@ Client = Backbone.Model.extend({
       return config[environment].url + config.computerMove;
     }
   },
-  postUpdatedGame: function(data, model, onSuccess) {
+  postUpdatedGame: function(data, onSuccess) {
     var url;
     url = this.getURL("computer");
     return $.ajax(url, {
       type: 'POST',
-      context: model,
       crossOrigin: true,
       dataType: 'json',
       data: data,
       success: function(response) {
-        return onSuccess(response, model);
+        return onSuccess(response);
       }
     });
   },
-  getGameStatus: function(parameters, model, onSuccess) {
+  getGameStatus: function(parameters, onSuccess) {
     var url;
     url = this.getURL("human") + parameters;
     return $.ajax(url, {
       crossOrigin: true,
       dataType: 'json',
       success: function(response) {
-        return onSuccess(response, model);
+        return onSuccess(response);
       }
     });
   }
