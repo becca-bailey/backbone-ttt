@@ -9,7 +9,7 @@ HandlebarsCompiler = require('./http/HandlebarsCompiler')
 httpConfig = require('../config/HTTPConfig')
 client = new Client(config: httpConfig)
 handlebarsCompiler = new HandlebarsCompiler
-attributes =  
+attributes =
   client: client
   compiler: handlebarsCompiler
 
