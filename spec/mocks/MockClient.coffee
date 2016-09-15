@@ -6,12 +6,12 @@ MockClient = Backbone.Model.extend(
 
   response: {board: ["X", "X", "X", "O", "", "", "O", "", ""], status: "player1Wins"}
 
-  postUpdatedGame: (data, model, onSuccess) ->
-    onSuccess(@response, model)
+  postUpdatedGame: (data, onSuccess) ->
+    onSuccess(@response)
 
-  getGameStatus: (parameters, model, onSuccess) ->
+  getGameStatus: (parameters, onSuccess) ->
     response = {status: "player1Wins"}
-    onSuccess(response, model)
+    onSuccess(response)
 )
 
 module.exports = MockClient

@@ -1,6 +1,7 @@
+$ = require('jquery')
+_ = require('underscore')
 Backbone = require('backbone')
 HandlebarsCompiler = require('../http/HandlebarsCompiler')
-$ = require('jquery')
 messages = require('../../config/UIConfig').statusMessages
 
 StatusView = Backbone.View.extend(
@@ -12,8 +13,9 @@ StatusView = Backbone.View.extend(
 
   render: ->
     compiler = new HandlebarsCompiler
-    compiler.load("status", (template)->
-      compiler.appendToContainer("#status-container", template))
+    compiler.load("status", _.bind(((template)->
+      compiler.appendToContainer("#status-container", template)
+      @showStatus()), this))
 
   showStatus: ->
     text = @getStatusText(@model.get('status'))
@@ -28,9 +30,9 @@ StatusView = Backbone.View.extend(
 
   getInProgressText: ->
     if @model.get('isXTurn')
-      messages.humanTurn
+      @model.player1TurnMessage
     else
-      messages.computerTurn
+      @model.player2TurnMessage
 )
 
 module.exports = StatusView

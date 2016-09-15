@@ -12,24 +12,23 @@ Client = Backbone.Model.extend(
     else
       config[environment].url + config.computerMove
 
-  postUpdatedGame: (data, model, onSuccess)->
+  postUpdatedGame: (data, onSuccess)->
     url = @getURL("computer")
     $.ajax url,
       type: 'POST'
-      context: model
       crossOrigin: true
       dataType: 'json'
       data: data
       success: (response) ->
-        onSuccess(response, model)
+        onSuccess(response)
 
-  getGameStatus: (parameters, model, onSuccess)->
+  getGameStatus: (parameters, onSuccess)->
     url = @getURL("human") + parameters
     $.ajax url,
       crossOrigin: true
       dataType: 'json'
       success: (response) ->
-        onSuccess(response, model)
+        onSuccess(response)
 )
 
 module.exports = Client
