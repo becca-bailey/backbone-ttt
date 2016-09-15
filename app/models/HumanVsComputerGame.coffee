@@ -1,4 +1,5 @@
 $ = require('jquery')
+_ = require('underscore')
 Game = require('./Game')
 messages = require('../../config/UIConfig').statusMessages
 
@@ -22,8 +23,8 @@ HumanVsComputerGame = Game.extend(
     json = {board: @get('board'), gameType: "humanVsComputer", computerDifficulty: "hard"}
     data = JSON.stringify(json)
     client = @get 'client'
-    client.postUpdatedGame(data, ((response)-> 
-      @updateGameWithResponseData(response)).bind(this))
+    client.postUpdatedGame(data, _.bind(((response)->
+      @updateGameWithResponseData(response)), this))
 )
 
 module.exports = HumanVsComputerGame
