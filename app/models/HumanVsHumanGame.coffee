@@ -16,10 +16,11 @@ HumanVsHumanGame = Game.extend(
   checkGameStatus: ->
     parameters = "?board=#{JSON.stringify(@get 'board')}"
     client = @get 'client'
-    client.getGameStatus(parameters, this, @updateStatusWithResponseData)
+    client.getGameStatus(parameters, ((response)-> 
+      @updateStatusWithResponseData(response)).bind(this))
 
-  updateStatusWithResponseData: (response, game) ->
-    game.set 'status': response.status
+  updateStatusWithResponseData: (response) ->
+    @updateStatus response.status
 )
 
 module.exports = HumanVsHumanGame

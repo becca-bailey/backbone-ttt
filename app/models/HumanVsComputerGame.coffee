@@ -13,16 +13,17 @@ HumanVsComputerGame = Game.extend(
     @changeTurn()
     @computerMove()
 
-  updateGameWithResponseData: (response, game) ->
-    game.set 'board': response.board
-    game.set 'status': response.status
-    game.set 'isXTurn': !game.get('isXTurn')
+  updateGameWithResponseData: (response) ->
+    @updateBoard response.board
+    @updateStatus response.status
+    @changeTurn()
 
   computerMove: ->
     json = {board: @get('board'), gameType: "humanVsComputer", computerDifficulty: "hard"}
     data = JSON.stringify(json)
     client = @get 'client'
-    client.postUpdatedGame(data, this, @updateGameWithResponseData)
+    client.postUpdatedGame(data, ((response)-> 
+      @updateGameWithResponseData(response)).bind(this))
 )
 
 module.exports = HumanVsComputerGame
