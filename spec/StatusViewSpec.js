@@ -2,11 +2,13 @@ var StatusView = require('../app/views/StatusView');
 var HumanVsComputerGame = require('../app/models/HumanVsComputerGame');
 var HumanVsHumanGame = require('../app/models/HumanVsHumanGame');
 var $ = require('jquery');
+var HandlebarsCompiler = require('../app/http/HandlebarsCompiler');
 messages = require('../config/UIConfig').statusMessages
 
 describe("StatusView", function() {
   beforeEach(function() {
-    game = new HumanVsComputerGame();
+    compiler = new HandlebarsCompiler();
+    game = new HumanVsComputerGame({compiler: compiler});
     statusView = new StatusView({model: game});
     jasmine.getFixtures().fixturesPath = '../partials';
     jasmine.getFixtures().load('status.html');
@@ -44,7 +46,7 @@ describe("StatusView", function() {
     });
 
     it("returns in-progress text for a human vs. human game", function() {
-      var hvhgame = new HumanVsHumanGame();
+      var hvhgame = new HumanVsHumanGame({compiler: compiler});
       statusView = new StatusView({model: hvhgame});
       
       statusView.model.set({'isXTurn': true});

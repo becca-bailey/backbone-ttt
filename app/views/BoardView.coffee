@@ -1,5 +1,4 @@
 Backbone = require('backbone')
-HandlebarsCompiler = require('../http/HandlebarsCompiler')
 $ = require('jquery')
 classes = require('../../config/UIConfig').classes
 
@@ -13,7 +12,7 @@ BoardView = Backbone.View.extend(
     @listenTo @model, 'change', @update
 
   render: ->
-    compiler = new HandlebarsCompiler
+    compiler = @model.get('compiler')
     compiler.load("board", (template)->
       compiler.appendToContainer("#board-container", template)
       $(".spot").height $(".spot").width())

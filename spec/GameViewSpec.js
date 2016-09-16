@@ -1,10 +1,12 @@
 var GameView = require('../app/views/GameView');
 var HumanVsComputerGame = require('../app/models/HumanVsComputerGame');
 var $ = require('jquery');
+var HandlebarsCompiler = require('../app/http/HandlebarsCompiler');
 
 describe("GameView", function() {
   beforeEach(function() {
-    game = new HumanVsComputerGame();
+    compiler = new HandlebarsCompiler()
+    game = new HumanVsComputerGame({compiler: compiler});
     gameView = new GameView({model: game});
     jasmine.getFixtures().fixturesPath = '../partials';
     jasmine.getFixtures().load('game.html');
@@ -26,27 +28,27 @@ describe("GameView", function() {
     expect($("#status")).toBeDefined();
   });
 
-//  it("has a nested boardView", function() {
-//    expect(gameView.boardView).toBeDefined();
-//  });
-//
-//  it("has a nested statusView", function() {
-//    expect(gameView.statusView).toBeDefined();
-//  });
-//
-//  describe("resetGame", function() {
-//    beforeEach(function() {
-//      spyOn(gameView.model, "resetAttributes");
-//      spyOn(gameView.boardView, "enableAllSpots");
-//      gameView.resetGame();
-//    });
-//
-//    it("resets all attributes in the model", function() {
-//      expect(gameView.model.resetAttributes).toHaveBeenCalled();
-//    });
-//
-//    it("enables all spots", function() {
-//      expect(gameView.boardView.enableAllSpots).toHaveBeenCalled();
-//    });
-//  });
-}); 
+  it("has a nested boardView", function() {
+    expect(gameView.boardView).toBeDefined();
+  });
+
+  it("has a nested statusView", function() {
+    expect(gameView.statusView).toBeDefined();
+  });
+
+  describe("resetGame", function() {
+    beforeEach(function() {
+      spyOn(gameView.model, "resetAttributes");
+      spyOn(gameView.boardView, "enableAllSpots");
+      gameView.resetGame();
+    });
+
+    it("resets all attributes in the model", function() {
+      expect(gameView.model.resetAttributes).toHaveBeenCalled();
+    });
+
+    it("enables all spots", function() {
+      expect(gameView.boardView.enableAllSpots).toHaveBeenCalled();
+    });
+  });
+});
