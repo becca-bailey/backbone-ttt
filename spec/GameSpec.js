@@ -17,17 +17,17 @@ describe("Game", function() {
     expect(board).toEqual(initialBoard);
   });
 
+
   it("is initialized with a status", function() {
     var status = game.get('status');
     expect(status).toEqual("in progress");
   });
 
-  it("can be initialized with a client", function() {
-    expect(game.get('client')).toBeDefined();
-  });
-
-  it("can be initialized with a compiler", function() {
-    expect(game.get('compiler')).toBeDefined();
+  describe("setSpotToMarker", function() {
+    it("updates the board with the given spot", function() {
+      game.setSpotToMarker(0);
+      expect(game.get('board')).toEqual(player1Move);
+    });
   });
 
   describe("isOver", function() {

@@ -8,9 +8,7 @@ HumanVsHumanGame = Game.extend(
   player2TurnMessage: messages.oTurn
 
   makeMove: (spotId) ->
-    board = @get('board')
-    board[spotId] = @getCurrentMarker()
-    @updateBoard board
+    @setSpotToMarker(parseInt spotId)
     @changeTurn()
     @checkGameStatus()
 

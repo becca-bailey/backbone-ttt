@@ -8,9 +8,7 @@ HumanVsComputerGame = Game.extend(
   player2TurnMessage: messages.computerTurn
 
   makeMove: (spotId) ->
-    board = @get('board')
-    board[spotId] = @getCurrentMarker()
-    @updateBoard board
+    @setSpotToMarker(parseInt spotId)
     @changeTurn()
     @computerMove()
 
