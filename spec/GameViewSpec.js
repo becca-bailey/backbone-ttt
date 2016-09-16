@@ -1,11 +1,11 @@
 var GameView = require('../app/views/GameView');
 var HumanVsComputerGame = require('../app/models/HumanVsComputerGame');
 var $ = require('jquery');
-var MockCompiler = require('./mocks/MockCompiler');
+var HandlebarsCompiler = require('../app/http/HandlebarsCompiler');
 
 describe("GameView", function() {
   beforeEach(function() {
-    compiler = new MockCompiler()
+    compiler = new HandlebarsCompiler()
     game = new HumanVsComputerGame({compiler: compiler});
     gameView = new GameView({model: game});
     jasmine.getFixtures().fixturesPath = '../partials';
@@ -51,4 +51,4 @@ describe("GameView", function() {
       expect(gameView.boardView.enableAllSpots).toHaveBeenCalled();
     });
   });
-}); 
+});

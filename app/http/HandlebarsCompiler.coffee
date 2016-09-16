@@ -6,6 +6,7 @@ HandlebarsCompiler = Backbone.Model.extend(
 
   load: (templateName, onCompletion) ->
     $.ajax "./partials/#{templateName}.html",
+      async: false
       success: (data) ->
         template = Handlebars.compile(data)
         onCompletion(template)
