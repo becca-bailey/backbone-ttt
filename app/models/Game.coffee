@@ -7,6 +7,11 @@ Game = Backbone.Model.extend(
     status: 'in progress'
     isXTurn: true
 
+  setSpotToMarker: (spot) ->
+    board = @get('board')
+    board[spot] = @getCurrentMarker()
+    @updateBoard board
+
   isOver: ->
     @get('status') != 'in progress'
 
